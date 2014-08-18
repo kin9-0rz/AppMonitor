@@ -33,8 +33,8 @@ public class XHttpPost extends XHook {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
 		logList = new ArrayList<String>();
-		XposedHelpers.findAndHookConstructor(className, classLoader,
-				"HttpPost", URI.class, new XC_MethodHook() {
+		XposedHelpers.findAndHookConstructor(className, classLoader, URI.class,
+				new XC_MethodHook() {
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) {
 						String time = Util.getSystemTime();
@@ -42,16 +42,16 @@ public class XHttpPost extends XHook {
 						logList.add("action:--http post--");
 						logList.add("function:HttpPost");
 						logList.add("url:" + param.args[0].toString());
-						for(String log : logList){
+						for (String log : logList) {
 							XposedBridge.log(log);
 						}
-						Util.writeLog(localpkgName,logList);
+						Util.writeLog(localpkgName, logList);
 						logList.clear();
 					}
 				});
-		
+
 		XposedHelpers.findAndHookConstructor(className, classLoader,
-				"HttpPost", String.class, new XC_MethodHook() {
+				String.class, new XC_MethodHook() {
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) {
 						String time = Util.getSystemTime();
@@ -59,10 +59,10 @@ public class XHttpPost extends XHook {
 						logList.add("action:--http post--");
 						logList.add("function:HttpPost");
 						logList.add("url:" + param.args[0].toString());
-						for(String log : logList){
+						for (String log : logList) {
 							XposedBridge.log(log);
 						}
-						Util.writeLog(localpkgName,logList);
+						Util.writeLog(localpkgName, logList);
 						logList.clear();
 					}
 				});

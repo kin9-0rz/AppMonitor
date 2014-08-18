@@ -33,7 +33,7 @@ public class XDexClassLoader extends XHook {
 		localpkgName = pkgName;
 		logList = new ArrayList<String>();
 		XposedHelpers.findAndHookConstructor(className, classLoader,
-				"DexClassLoader", String.class, String.class, String.class,
+				String.class, String.class, String.class,
 				ClassLoader.class, new XC_MethodHook() {
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) {
@@ -50,22 +50,6 @@ public class XDexClassLoader extends XHook {
 					}
 				});
 		
-		XposedHelpers.findAndHookConstructor("java.lang.ClassLoader", classLoader,
-				"loadClass", String.class, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) {
-						String time = Util.getSystemTime();
-						logList.add("time:" + time);
-						logList.add("action:--load class--");
-						logList.add("function:loadClass");
-						logList.add("class:" + param.args[0].toString());
-						for(String log : logList){
-							XposedBridge.log(log);
-						}
-						Util.writeLog(localpkgName,logList);
-						logList.clear();
-					}
-				});
 	}
 
 }

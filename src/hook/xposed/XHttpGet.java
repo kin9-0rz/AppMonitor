@@ -33,8 +33,9 @@ public class XHttpGet extends XHook {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
 		logList = new ArrayList<String>();
-		XposedHelpers.findAndHookConstructor(className, classLoader, "HttpGet",
-				URI.class, new XC_MethodHook() {
+
+		XposedHelpers.findAndHookConstructor(className, classLoader, URI.class,
+				new XC_MethodHook() {
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) {
 						String time = Util.getSystemTime();
@@ -42,15 +43,15 @@ public class XHttpGet extends XHook {
 						logList.add("action:--http get--");
 						logList.add("function:HttpGet");
 						logList.add("url:" + param.args[0].toString());
-						for(String log : logList){
+						for (String log : logList) {
 							XposedBridge.log(log);
 						}
-						Util.writeLog(localpkgName,logList);
+						Util.writeLog(localpkgName, logList);
 						logList.clear();
 					}
 				});
-		
-		XposedHelpers.findAndHookConstructor(className, classLoader, "HttpGet",
+
+		XposedHelpers.findAndHookConstructor(className, classLoader,
 				String.class, new XC_MethodHook() {
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) {
@@ -59,10 +60,10 @@ public class XHttpGet extends XHook {
 						logList.add("action:--http get--");
 						logList.add("function:HttpGet");
 						logList.add("url:" + param.args[0].toString());
-						for(String log : logList){
+						for (String log : logList) {
 							XposedBridge.log(log);
 						}
-						Util.writeLog(localpkgName,logList);
+						Util.writeLog(localpkgName, logList);
 						logList.clear();
 					}
 

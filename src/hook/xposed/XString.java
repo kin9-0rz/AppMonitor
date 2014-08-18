@@ -32,7 +32,7 @@ public class XString extends XHook {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
 		logList = new ArrayList<String>();
-		XposedHelpers.findAndHookConstructor(className, classLoader, "String",
+		XposedHelpers.findAndHookConstructor(className, classLoader,
 				String.class, new XC_MethodHook() {
 
 					@Override
@@ -42,10 +42,10 @@ public class XString extends XHook {
 						logList.add("action:--new String--");
 						logList.add("function:String");
 						logList.add("string:" + param.args[0].toString());
-						for(String log : logList){
+						for (String log : logList) {
 							XposedBridge.log(log);
 						}
-						Util.writeLog(localpkgName,logList);
+						Util.writeLog(localpkgName, logList);
 						logList.clear();
 					}
 
