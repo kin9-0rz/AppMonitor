@@ -2,7 +2,6 @@ package hook.xposed;
 
 import util.Util;
 import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 public class HookApp implements IXposedHookLoadPackage {
@@ -12,7 +11,7 @@ public class HookApp implements IXposedHookLoadPackage {
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) {
 		// TODO Auto-generated method stub
-		XposedBridge.log("loaded app:" + lpparam.packageName);
+//		XposedBridge.log("loaded app:" + lpparam.packageName);
 		packageName = Util.readData();
 		if (!packageName.equals(lpparam.packageName))
 			return;

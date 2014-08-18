@@ -32,22 +32,26 @@ public class XURL extends XHook {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
 		logList = new ArrayList<String>();
-		XposedHelpers.findAndHookConstructor(className, classLoader, "URL",
-				String.class, new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) {
-						String time = Util.getSystemTime();
-						logList.add("time:" + time);
-						logList.add("action:--new url--");
-						logList.add("function:getDeviceId");
-						logList.add("url:" + param.args[0].toString());
-						for(String log : logList){
-							XposedBridge.log(log);
-						}
-						Util.writeLog(localpkgName,logList);
-						logList.clear();
-					}
-				});
+		Class<?> clazz = XposedHelpers.findClass(className, classLoader);
+		
+		XposedHelpers.findAndHookConstructor(clazz, String.class, new XC_MethodHook(){
+
+			@Override
+			protected void afterHookedMethod(MethodHookParam param){
+				// TODO Auto-generated method stub
+				String time = Util.getSystemTime();
+				logList.add("time:" + time);
+				logList.add("action:--new url--");
+				logList.add("function:getDeviceId");
+				logList.add("url:" + param.args[0].toString());
+				for(String log : logList){
+					XposedBridge.log(log);
+				}
+				Util.writeLog(localpkgName,logList);
+				logList.clear();
+			}
+			
+		});
 		
 		XposedHelpers.findAndHookMethod(className, classLoader,
 				"openConnection", new XC_MethodHook() {
