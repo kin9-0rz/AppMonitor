@@ -37,7 +37,7 @@ public class HookApp implements IXposedHookLoadPackage {
 		// hook System will can not open app
 //		hookall(XSystem.getInstance(), packageName, lpparam.classLoader);
 		//hook DexClassLoader waiting to test
-//		hookall(XDexClassLoader.getInstance(), packageName, lpparam.classLoader);
+		hookall(XDexClassLoader.getInstance(), packageName, lpparam.classLoader);
 
 	}
 	
