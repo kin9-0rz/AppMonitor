@@ -12,6 +12,7 @@ import de.robv.android.xposed.XposedHelpers;
 public class XSmsManger extends XHook {
 	private static final String className = "android.telephony.SmsManager";
 	private static String localpkgName = null;
+	private static ClassLoader localcl = null;
 	private static List<String> logList = null;
 	private static XSmsManger classLoadHook;
 	
@@ -32,6 +33,7 @@ public class XSmsManger extends XHook {
 	void hook(String pkgName, ClassLoader classLoader) {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
+		localcl = classLoader;
 		logList = new ArrayList<String>();
 		XposedHelpers.findAndHookMethod(className, classLoader,
 				"sendTextMessage", String.class, String.class, String.class,
@@ -44,6 +46,7 @@ public class XSmsManger extends XHook {
 						logList.add("function:sendTextMessage");
 						logList.add("target:" + param.args[0].toString());
 						logList.add("text:" + param.args[2].toString());
+						logList.add("call class:"+localcl.getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}
@@ -67,6 +70,7 @@ public class XSmsManger extends XHook {
 						logList.add("function:sendMultipartTextMessage");
 						logList.add("target:" + param.args[0].toString());
 						logList.add("text:" + param.args[2].toString());
+						logList.add("call class:"+localcl.getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}
@@ -90,6 +94,7 @@ public class XSmsManger extends XHook {
 						logList.add("function:sendDataMessage");
 						logList.add("target:" + param.args[0].toString());
 						logList.add("text:" + param.args[3].toString());
+						logList.add("call class:"+localcl.getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}

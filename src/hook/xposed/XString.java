@@ -11,6 +11,7 @@ import de.robv.android.xposed.XposedHelpers;
 public class XString extends XHook {
 	private static final String className = "java.lang.String";
 	private static String localpkgName = null;
+	private static ClassLoader localcl = null;
 	private static List<String> logList = null;
 	private static XString classLoadHook;
 
@@ -31,8 +32,9 @@ public class XString extends XHook {
 	void hook(String pkgName, ClassLoader classLoader) {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
+		localcl = classLoader;
 		logList = new ArrayList<String>();
-		XposedHelpers.findAndHookConstructor(className, classLoader, "String",
+		XposedHelpers.findAndHookConstructor(className, classLoader,
 				String.class, new XC_MethodHook() {
 
 					@Override
@@ -42,10 +44,11 @@ public class XString extends XHook {
 						logList.add("action:--new String--");
 						logList.add("function:String");
 						logList.add("string:" + param.args[0].toString());
-						for(String log : logList){
+						logList.add("call class:"+localcl.getClass().toString());
+						for (String log : logList) {
 							XposedBridge.log(log);
 						}
-						Util.writeLog(localpkgName,logList);
+						Util.writeLog(localpkgName, logList);
 						logList.clear();
 					}
 

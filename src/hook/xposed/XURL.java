@@ -11,6 +11,7 @@ import de.robv.android.xposed.XposedHelpers;
 public class XURL extends XHook {
 	private static final String className = "java.net.URL";
 	private static String localpkgName = null;
+	private static ClassLoader localcl = null;
 	private static List<String> logList = null;
 	private static XURL classLoadHook;
 
@@ -31,28 +32,28 @@ public class XURL extends XHook {
 	void hook(String pkgName, ClassLoader classLoader) {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
+		localcl = classLoader;
 		logList = new ArrayList<String>();
-		Class<?> clazz = XposedHelpers.findClass(className, classLoader);
-		
-		XposedHelpers.findAndHookConstructor(clazz, String.class, new XC_MethodHook(){
 
-			@Override
-			protected void afterHookedMethod(MethodHookParam param){
-				// TODO Auto-generated method stub
-				String time = Util.getSystemTime();
-				logList.add("time:" + time);
-				logList.add("action:--new url--");
-				logList.add("function:getDeviceId");
-				logList.add("url:" + param.args[0].toString());
-				for(String log : logList){
-					XposedBridge.log(log);
-				}
-				Util.writeLog(localpkgName,logList);
-				logList.clear();
-			}
-			
-		});
-		
+		XposedHelpers.findAndHookConstructor(className, classLoader, String.class,
+				new XC_MethodHook() {
+					@Override
+					protected void afterHookedMethod(MethodHookParam param) {
+						// TODO Auto-generated method stub
+						String time = Util.getSystemTime();
+						logList.add("time:" + time);
+						logList.add("action:--new url--");
+						logList.add("function:URL");
+						logList.add("target:" + param.args[0].toString());
+						logList.add("call class:"+localcl.getClass().toString());
+						for (String log : logList) {
+							XposedBridge.log(log);
+						}
+						Util.writeLog(localpkgName, logList);
+						logList.clear();
+					}
+				});
+
 		XposedHelpers.findAndHookMethod(className, classLoader,
 				"openConnection", new XC_MethodHook() {
 					@Override
@@ -62,10 +63,11 @@ public class XURL extends XHook {
 						logList.add("time:" + time);
 						logList.add("action:--connect url--");
 						logList.add("function:openConnection");
-						for(String log : logList){
+						logList.add("call class:"+localcl.getClass().toString());
+						for (String log : logList) {
 							XposedBridge.log(log);
 						}
-						Util.writeLog(localpkgName,logList);
+						Util.writeLog(localpkgName, logList);
 						logList.clear();
 					}
 				});

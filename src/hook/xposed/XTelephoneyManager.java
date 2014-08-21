@@ -11,6 +11,7 @@ import de.robv.android.xposed.XposedHelpers;
 public class XTelephoneyManager extends XHook {
 	private static final String className = "android.telephony.TelephonyManager";
 	private static String localpkgName = null;
+	private static ClassLoader localcl = null;
 	private static List<String> logList = null;
 	private static XTelephoneyManager classLoadHook;
 
@@ -31,6 +32,7 @@ public class XTelephoneyManager extends XHook {
 	void hook(String pkgName, ClassLoader classLoader) {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
+		localcl = classLoader;
 		logList = new ArrayList<String>();
 		XposedHelpers.findAndHookMethod(className, classLoader, "getDeviceId",
 				new XC_MethodHook() {
@@ -42,6 +44,7 @@ public class XTelephoneyManager extends XHook {
 						logList.add("time:" + time);
 						logList.add("action:--get IMEI--");
 						logList.add("function:getDeviceId");
+						logList.add("call class:"+localcl.getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}
@@ -61,6 +64,7 @@ public class XTelephoneyManager extends XHook {
 						logList.add("time:" + time);
 						logList.add("action:--get phnoeNumber--");
 						logList.add("function:getLine1Number");
+						logList.add("call class:"+localcl.getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}
@@ -80,6 +84,7 @@ public class XTelephoneyManager extends XHook {
 						logList.add("time:" + time);
 						logList.add("action:--get IMSI--");
 						logList.add("function:getSubscriberId");
+						logList.add("call class:"+localcl.getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}
