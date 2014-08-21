@@ -11,7 +11,6 @@ public class HookApp implements IXposedHookLoadPackage {
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) {
 		// TODO Auto-generated method stub
-//		XposedBridge.log("loaded app:" + lpparam.packageName);
 		packageName = Util.readData();
 		if (!packageName.equals(lpparam.packageName))
 			return;
@@ -22,6 +21,8 @@ public class HookApp implements IXposedHookLoadPackage {
 		hookall(XSmsManger.getInstance(), packageName, lpparam.classLoader);
 		// hook Class
 		hookall(XClass.getInstance(), packageName, lpparam.classLoader);
+		// hook Method
+		hookall(XMethod.getInstance(), packageName, lpparam.classLoader);
 		// hook String too much
 //		hookall(XString.getInstance(), packageName, lpparam.classLoader);
 		// hook URL

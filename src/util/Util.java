@@ -43,11 +43,9 @@ public class Util {
 	
 	public static void writeLog(String pkgName, List<String> logList){
 		if(SDUtils.isSdCardAvailable()){
-//			File logDir = SDUtils.createDir("Appmonitor/AppLog");
 			File logFile = SDUtils.createFile("Appmonitor/AppLog", pkgName);
 			FileWriter fw = null;
 			try{
-				//解决打开文件从头开始问题，换行问题
 				fw = new FileWriter(logFile, true);
 				for(String log : logList){
 					fw.write(log+"\n");

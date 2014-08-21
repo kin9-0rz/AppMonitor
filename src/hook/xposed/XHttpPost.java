@@ -12,6 +12,7 @@ import de.robv.android.xposed.XposedHelpers;
 public class XHttpPost extends XHook {
 	private static final String className = "org.apache.http.client.methods.HttpPost";
 	private static String localpkgName = null;
+	private static ClassLoader localcl = null;
 	private static List<String> logList = null;
 	private static XHttpPost classLoadHook;
 
@@ -32,6 +33,7 @@ public class XHttpPost extends XHook {
 	void hook(String pkgName, ClassLoader classLoader) {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
+		localcl = classLoader;
 		logList = new ArrayList<String>();
 		XposedHelpers.findAndHookConstructor(className, classLoader, URI.class,
 				new XC_MethodHook() {
@@ -42,6 +44,7 @@ public class XHttpPost extends XHook {
 						logList.add("action:--http post--");
 						logList.add("function:HttpPost");
 						logList.add("url:" + param.args[0].toString());
+						logList.add("call class:"+localcl.getClass().toString());
 						for (String log : logList) {
 							XposedBridge.log(log);
 						}
@@ -59,6 +62,7 @@ public class XHttpPost extends XHook {
 						logList.add("action:--http post--");
 						logList.add("function:HttpPost");
 						logList.add("url:" + param.args[0].toString());
+						logList.add("call class:"+localcl.getClass().toString());
 						for (String log : logList) {
 							XposedBridge.log(log);
 						}

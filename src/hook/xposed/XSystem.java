@@ -11,6 +11,7 @@ import de.robv.android.xposed.XposedHelpers;
 public class XSystem extends XHook{
 	private static final String className = "java.lang.System";
 	private static String localpkgName = null;
+	private static ClassLoader localcl = null;
 	private static List<String> logList = null;
 	private static XSystem classLoadHook;
 
@@ -31,6 +32,7 @@ public class XSystem extends XHook{
 	void hook(String pkgName, ClassLoader classLoader) {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
+		localcl = classLoader;
 		logList = new ArrayList<String>();
 		XposedHelpers.findAndHookMethod(className, classLoader, "loadLibrary",
 				String.class, new XC_MethodHook() {
@@ -41,6 +43,7 @@ public class XSystem extends XHook{
 						logList.add("action:--load so file--");
 						logList.add("function:loadLibrary");
 						logList.add("lib:" + param.args[0].toString());
+						logList.add("call class:"+localcl.getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}

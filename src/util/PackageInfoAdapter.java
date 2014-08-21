@@ -55,7 +55,7 @@ public class PackageInfoAdapter extends BaseAdapter {
 			holder = new ViewHolder(view);
 			view.setTag(holder);
 		} else {
-			view = convertView;
+			view = convertView; 
 			holder = (ViewHolder)view.getTag();
 		}
 		
