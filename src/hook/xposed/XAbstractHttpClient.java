@@ -14,7 +14,6 @@ import de.robv.android.xposed.XposedHelpers;
 public class XAbstractHttpClient extends XHook {
 	private static final String className = "org.apache.http.impl.client.AbstractHttpClient";
 	private static String localpkgName = null;
-	private static ClassLoader localcl = null;
 	private static List<String> logList = null;
 	private static XAbstractHttpClient classLoadHook;
 
@@ -36,7 +35,6 @@ public class XAbstractHttpClient extends XHook {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
 		logList = new ArrayList<String>();
-		localcl = classLoader;
 		XposedHelpers.findAndHookMethod(className, classLoader, "execute",
 				HttpHost.class, HttpRequest.class, HttpContext.class,
 				new XC_MethodHook() {
@@ -48,7 +46,6 @@ public class XAbstractHttpClient extends XHook {
 						logList.add("action:--executed--");
 						logList.add("function:execute");
 						logList.add("url:" + param.args[0].toString());
-						logList.add("call class:"+localcl.getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}

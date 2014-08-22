@@ -11,7 +11,6 @@ import de.robv.android.xposed.XposedHelpers;
 public class XURL extends XHook {
 	private static final String className = "java.net.URL";
 	private static String localpkgName = null;
-	private static ClassLoader localcl = null;
 	private static List<String> logList = null;
 	private static XURL classLoadHook;
 
@@ -32,7 +31,6 @@ public class XURL extends XHook {
 	void hook(String pkgName, ClassLoader classLoader) {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
-		localcl = classLoader;
 		logList = new ArrayList<String>();
 
 		XposedHelpers.findAndHookConstructor(className, classLoader, String.class,
@@ -45,7 +43,6 @@ public class XURL extends XHook {
 						logList.add("action:--new url--");
 						logList.add("function:URL");
 						logList.add("target:" + param.args[0].toString());
-						logList.add("call class:"+localcl.getClass().toString());
 						for (String log : logList) {
 							XposedBridge.log(log);
 						}
@@ -63,7 +60,6 @@ public class XURL extends XHook {
 						logList.add("time:" + time);
 						logList.add("action:--connect url--");
 						logList.add("function:openConnection");
-						logList.add("call class:"+localcl.getClass().toString());
 						for (String log : logList) {
 							XposedBridge.log(log);
 						}

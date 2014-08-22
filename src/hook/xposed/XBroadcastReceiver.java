@@ -11,7 +11,6 @@ import de.robv.android.xposed.XposedHelpers;
 public class XBroadcastReceiver extends XHook {
 	private static final String className = "android.content.BroadcastReceiver";
 	private static String localpkgName = null;
-	private static ClassLoader localcl = null;
 	private static List<String> logList = null;
 	private static XBroadcastReceiver classLoadHook;
 
@@ -32,7 +31,6 @@ public class XBroadcastReceiver extends XHook {
 	void hook(String pkgName, ClassLoader classLoader) {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
-		localcl = classLoader;
 		logList = new ArrayList<String>();
 		XposedHelpers.findAndHookMethod(className, classLoader,
 				"abortBroadcast", new XC_MethodHook() {
@@ -43,7 +41,6 @@ public class XBroadcastReceiver extends XHook {
 						logList.add("time:" + time);
 						logList.add("action:--sms abort--");
 						logList.add("function:abortBroadcast");
-						logList.add("call class:"+localcl.getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}
