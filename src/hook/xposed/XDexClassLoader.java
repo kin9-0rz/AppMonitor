@@ -11,7 +11,6 @@ import de.robv.android.xposed.XposedHelpers;
 public class XDexClassLoader extends XHook {
 	private static final String className = "dalvik.system.DexClassLoader";
 	private static String localpkgName = null;
-	private static ClassLoader localcl = null;
 	private static List<String> logList = null;
 	private static XDexClassLoader classLoadHook;
 
@@ -32,7 +31,6 @@ public class XDexClassLoader extends XHook {
 	void hook(String pkgName, ClassLoader classLoader) {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
-		localcl = classLoader;
 		logList = new ArrayList<String>();
 		XposedHelpers.findAndHookConstructor(className, classLoader,
 				String.class, String.class, String.class,
@@ -44,7 +42,6 @@ public class XDexClassLoader extends XHook {
 						logList.add("action:--load dex--");
 						logList.add("function:DexClassLoader");
 						logList.add("dex path:" + param.args[0].toString());
-						logList.add("call class:"+localcl.getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}

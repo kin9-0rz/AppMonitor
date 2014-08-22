@@ -23,6 +23,8 @@ public class HookApp implements IXposedHookLoadPackage {
 		hookall(XClass.getInstance(), packageName, lpparam.classLoader);
 		// hook Method
 		hookall(XMethod.getInstance(), packageName, lpparam.classLoader);
+		// hook File
+		hookall(XFlie.getInstance(), packageName, lpparam.classLoader);
 		// hook String too much
 //		hookall(XString.getInstance(), packageName, lpparam.classLoader);
 		// hook URL
