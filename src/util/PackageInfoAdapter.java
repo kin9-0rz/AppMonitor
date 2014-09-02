@@ -63,12 +63,7 @@ public class PackageInfoAdapter extends BaseAdapter {
 		AppInfo appInfo = (AppInfo)getItem(position);
 		holder.appIcon.setImageDrawable(appInfo.getAppIcon());
 		holder.appPkgName.setText(appInfo.getPkgName());
-		if(misSelected[position]){
-			holder.isChooseButton.setSelected(true);
-		}else{
-			holder.isChooseButton.setSelected(false);
-		}
-
+		holder.isChooseButton.setChecked(misSelected[position]);
 		return view;
 	}
 

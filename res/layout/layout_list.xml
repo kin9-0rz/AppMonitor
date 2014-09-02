@@ -4,29 +4,33 @@
     android:layout_height="fill_parent"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal" >
-    
-    <ImageView 
+
+    <ImageView
         android:id="@+id/appIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:contentDescription="@string/Icon"
-        />
+        android:contentDescription="@string/Icon" />
 
     <TextView
         android:id="@+id/packagename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/appIcon"
         android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/appIcon"
         android:textColor="#ffffff"
         android:textIsSelectable="false" />
-    
+
     <CheckBox
         android:id="@+id/isChoose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textIsSelectable="false" />
+
 </RelativeLayout>
