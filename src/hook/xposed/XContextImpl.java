@@ -3,24 +3,28 @@ package hook.xposed;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+
 import util.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
-public class XDexClassLoader extends XHook {
-	private static final String className = "dalvik.system.DexClassLoader";
+public class XContextImpl extends XHook{
+
+	private static final String className = "android.app.ContextImpl";
 	private static String localpkgName = null;
 	private static List<String> logList = null;
-	private static XDexClassLoader classLoadHook;
+	private static XContextImpl classLoadHook;
 
-	public static XDexClassLoader getInstance() {
+	public static XContextImpl getInstance() {
 		if (classLoadHook == null) {
-			classLoadHook = new XDexClassLoader();
+			classLoadHook = new XContextImpl();
 		}
 		return classLoadHook;
 	}
-
+	
 	@Override
 	String getClassName() {
 		// TODO Auto-generated method stub
@@ -32,16 +36,16 @@ public class XDexClassLoader extends XHook {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
 		logList = new ArrayList<String>();
-		XposedHelpers.findAndHookConstructor(className, classLoader,
-				String.class, String.class, String.class,
-				ClassLoader.class, new XC_MethodHook() {
+		XposedHelpers.findAndHookMethod(className, classLoader, "registerReceiver",
+				BroadcastReceiver.class, IntentFilter.class, new XC_MethodHook() {
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) {
+						// TODO Auto-generated method stub
 						String time = Util.getSystemTime();
 						logList.add("time:" + time);
-						logList.add("action:--load dex--");
-						logList.add("function:DexClassLoader");
-						logList.add("dex path:" + param.args[0].toString());
+						logList.add("action:--register broadcastReceiver--");
+						logList.add("function:registerReceiver");
+						logList.add("Receiver Name:" + param.args[0].toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}
@@ -49,7 +53,6 @@ public class XDexClassLoader extends XHook {
 						logList.clear();
 					}
 				});
-
 	}
 
 }

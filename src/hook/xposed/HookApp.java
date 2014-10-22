@@ -14,40 +14,49 @@ public class HookApp implements IXposedHookLoadPackage {
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) {
 		// TODO Auto-generated method stub
-//		packageName = Util.readData();
 		appList = Util.jsonStr2list(Util.readData());
 		if (appList == null||!appList.contains(lpparam.packageName))
 			return;
 		else packageName = lpparam.packageName;
-//		System.out.println("*****************succeed***********");
 
-		// hook TelephoneManger
+		//hook TelephoneManger
 		hookall(XTelephoneyManager.getInstance(), packageName, lpparam.classLoader);
-		// hook SmsManager
+		//hook SmsManager
 		hookall(XSmsManger.getInstance(), packageName, lpparam.classLoader);
-		// hook Class
+		//hook Class
 		hookall(XClass.getInstance(), packageName, lpparam.classLoader);
-		// hook Method
+		//hook Method
 		hookall(XMethod.getInstance(), packageName, lpparam.classLoader);
-		// hook File
-//		hookall(XFlie.getInstance(), packageName, lpparam.classLoader);
-		// hook String too much
-//		hookall(XString.getInstance(), packageName, lpparam.classLoader);
-		// hook URL
+		//hook URL
 		hookall(XURL.getInstance(), packageName, lpparam.classLoader);
-		// hook HttpGet
+		//hook HttpGet
 		hookall(XHttpGet.getInstance(), packageName, lpparam.classLoader);
-		// hook HttpPost
+		//hook HttpPost
 		hookall(XHttpPost.getInstance(), packageName, lpparam.classLoader);
-		// hook AbstractHttpClient
+		//hook AbstractHttpClient
 		hookall(XAbstractHttpClient.getInstance(), packageName, lpparam.classLoader);
-		// hook BroadcastReceiver
+		//hook BroadcastReceiver
 		hookall(XBroadcastReceiver.getInstance(), packageName, lpparam.classLoader);
-		// hook System will can not open app
-//		hookall(XSystem.getInstance(), packageName, lpparam.classLoader);
-		//hook DexClassLoader waiting to test
+		//hook DexClassLoader
 		hookall(XDexClassLoader.getInstance(), packageName, lpparam.classLoader);
-
+		//hook ActivityManager
+		hookall(XActivityManager.getInstance(), packageName, lpparam.classLoader);
+		//hook ContentResolver
+		hookall(XContentResolver.getInstance(), packageName, lpparam.classLoader);
+		//hook ContextImpl
+		hookall(XContextImpl.getInstance(), packageName, lpparam.classLoader);
+		//hook MediaRecorder
+		hookall(XMediaRecorder.getInstance(), packageName, lpparam.classLoader);
+		//hook Runtime
+		hookall(XRuntime.getInstance(), packageName, lpparam.classLoader);
+		//hook ActivityThread
+		hookall(XActivityThread.getInstance(), packageName, lpparam.classLoader);
+		//hook AudioRecord
+		hookall(XAudioRecord.getInstance(), packageName, lpparam.classLoader);
+		//hook Notification
+		hookall(XNotificationManager.getInstance(), packageName, lpparam.classLoader);
+		//hook ProcessBuilder
+		hookall(XProcessBuilder.getInstance(), packageName, lpparam.classLoader);
 	}
 	
 	public void hookall(XHook xhook, String pkgName, ClassLoader classLoader){
