@@ -8,9 +8,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import android.util.Log;
 
 public class Util {
 	
@@ -28,6 +34,7 @@ public class Util {
 			File file = SDUtils.createFile(moniterDir.getName(), "data");
 			try {
 				FileInputStream in = new FileInputStream(file);
+//				System.out.println("***********readData************");
 				BufferedReader br = new BufferedReader(new InputStreamReader(in));
 				String str = br.readLine();
 				data = str;
@@ -39,6 +46,61 @@ public class Util {
 			}
 		}
 		return data;
+	}
+	
+	public static List<String> jsonStr2list(String jsonStr){
+		List<String> appList = new ArrayList<String>();
+		try {
+			JSONObject jsonObject = new JSONObject(jsonStr);
+			JSONArray jsonArr = jsonObject.getJSONArray("APP");
+			for (int i = 0; i < jsonArr.length(); i++) {
+				JSONObject jo = (JSONObject) jsonArr.opt(i);
+				appList.add(jo.getString("packageName"));
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("json error!!!");
+		}
+		return appList;
+	}
+	
+	public static String list2json(List<String> list) {
+		String jsonresult = null;
+		JSONObject jsonObj = new JSONObject();
+		try {
+			JSONArray jsonArr = new JSONArray();
+			for (String pkg : list) {
+				JSONObject jobj = new JSONObject();
+				jobj.put("packageName", pkg);
+				jsonArr.put(jobj);
+			}
+			jsonObj.put("APP", jsonArr);
+		} catch (Exception e) {
+			System.out.println("json error!!!");
+		}
+
+		jsonresult = jsonObj.toString();
+		return jsonresult;
+	}
+	
+	public static void saveData(String data) {
+		if(SDUtils.isSdCardAvailable()){
+			File moniterDir = SDUtils.createDir("Appmonitor");
+			File logDir = SDUtils.createDir(moniterDir.getName()+"/AppLog");
+			File file = SDUtils.createFile(moniterDir.getName(), "data");
+			Log.d("AppActivity", "created the path:" + logDir.getAbsolutePath());
+			FileWriter fw = null;
+			try {
+				fw = new FileWriter(file, false);
+				fw.write(data);
+				fw.flush();
+				fw.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("file not found!");
+			} catch (IOException e) {
+				System.out.println("Output error!");
+			}
+		}
 	}
 	
 	public static void writeLog(String pkgName, List<String> logList){

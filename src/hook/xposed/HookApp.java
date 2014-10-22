@@ -1,5 +1,7 @@
 package hook.xposed;
 
+import java.util.List;
+
 import util.Util;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
@@ -7,13 +9,17 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 public class HookApp implements IXposedHookLoadPackage {
 
 	private static String packageName = null;
+	private static List<String> appList = null;
 
 	@Override
 	public void handleLoadPackage(LoadPackageParam lpparam) {
 		// TODO Auto-generated method stub
-		packageName = Util.readData();
-		if (!packageName.equals(lpparam.packageName))
+//		packageName = Util.readData();
+		appList = Util.jsonStr2list(Util.readData());
+		if (appList == null||!appList.contains(lpparam.packageName))
 			return;
+		else packageName = lpparam.packageName;
+//		System.out.println("*****************succeed***********");
 
 		// hook TelephoneManger
 		hookall(XTelephoneyManager.getInstance(), packageName, lpparam.classLoader);
