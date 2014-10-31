@@ -1,8 +1,8 @@
 package hook.xposed;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import util.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
@@ -33,33 +33,17 @@ public class XURL extends XHook {
 		localpkgName = pkgName;
 		logList = new ArrayList<String>();
 
-		XposedHelpers.findAndHookConstructor(className, classLoader, String.class,
-				new XC_MethodHook() {
-					@Override
-					protected void afterHookedMethod(MethodHookParam param) {
-						// TODO Auto-generated method stub
-						String time = Util.getSystemTime();
-						logList.add("time:" + time);
-						logList.add("action:--new url--");
-						logList.add("function:URL");
-						logList.add("target:" + param.args[0].toString());
-						for (String log : logList) {
-							XposedBridge.log(log);
-						}
-						Util.writeLog(localpkgName, logList);
-						logList.clear();
-					}
-				});
-
 		XposedHelpers.findAndHookMethod(className, classLoader,
 				"openConnection", new XC_MethodHook() {
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) {
 						// TODO Auto-generated method stub
 						String time = Util.getSystemTime();
+						URL url = (URL)param.thisObject;
 						logList.add("time:" + time);
 						logList.add("action:--connect url--");
 						logList.add("function:openConnection");
+						logList.add("url:" + url.toString());
 						for (String log : logList) {
 							XposedBridge.log(log);
 						}
