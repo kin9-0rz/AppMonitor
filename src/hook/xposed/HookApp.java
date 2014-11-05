@@ -41,7 +41,7 @@ public class HookApp implements IXposedHookLoadPackage {
 		hookall(XDexClassLoader.getInstance(), packageName, lpparam.classLoader);
 		//hook ActivityManager
 		hookall(XActivityManager.getInstance(), packageName, lpparam.classLoader);
-		//hook ContentResolver have bugs to fix
+		//hook ContentResolver
 		hookall(XContentResolver.getInstance(), packageName, lpparam.classLoader);
 		//hook ContextImpl
 		hookall(XContextImpl.getInstance(), packageName, lpparam.classLoader);

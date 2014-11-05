@@ -1,5 +1,6 @@
 package hook.xposed;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +38,12 @@ public class XMethod extends XHook{
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) {
 						String time = Util.getSystemTime();
+						Method method = (Method)param.thisObject;
 						logList.add("time:" + time);
 						logList.add("action:--invoke method--");
 						logList.add("function:invoke");
+						logList.add("method name:" + method.getName());
+						logList.add("args:" + param.args[1]);
 						for(String log : logList){
 							XposedBridge.log(log);
 						}
