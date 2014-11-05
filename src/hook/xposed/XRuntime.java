@@ -1,5 +1,6 @@
 package hook.xposed;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,15 +9,16 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 
-public class XDexClassLoader extends XHook {
-	private static final String className = "dalvik.system.DexClassLoader";
+public class XRuntime extends XHook {
+
+	private static final String className = "java.lang.Runtime";
 	private static String localpkgName = null;
 	private static List<String> logList = null;
-	private static XDexClassLoader classLoadHook;
+	private static XRuntime classLoadHook;
 
-	public static XDexClassLoader getInstance() {
+	public static XRuntime getInstance() {
 		if (classLoadHook == null) {
-			classLoadHook = new XDexClassLoader();
+			classLoadHook = new XRuntime();
 		}
 		return classLoadHook;
 	}
@@ -32,24 +34,26 @@ public class XDexClassLoader extends XHook {
 		// TODO Auto-generated method stub
 		localpkgName = pkgName;
 		logList = new ArrayList<String>();
-		XposedHelpers.findAndHookConstructor(className, classLoader,
-				String.class, String.class, String.class,
-				ClassLoader.class, new XC_MethodHook() {
+		XposedHelpers.findAndHookMethod(className, classLoader, "exec",
+				String[].class, String[].class, File.class,
+				new XC_MethodHook() {
 					@Override
 					protected void afterHookedMethod(MethodHookParam param) {
 						String time = Util.getSystemTime();
+						String[] prog = (String[]) param.args[0];
 						logList.add("time:" + time);
-						logList.add("action:--load dex--");
-						logList.add("function:DexClassLoader");
-						logList.add("dex path:" + param.args[0].toString());
-						for(String log : logList){
+						logList.add("action:--Create New Process--");
+						logList.add("function:exec");
+						for (String str : prog) {
+							logList.add("command:" + str);
+						}
+						for (String log : logList) {
 							XposedBridge.log(log);
 						}
-						Util.writeLog(localpkgName,logList);
+						Util.writeLog(localpkgName, logList);
 						logList.clear();
 					}
 				});
-
 	}
 
 }

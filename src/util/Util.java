@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -121,5 +122,21 @@ public class Util {
 				System.out.println("Output error!");
 			}
 		}
+	}
+	
+	public static Method findMethodExact(String className, ClassLoader classLoader, String methodName, Class<?>... parameterTypes) {
+
+		try {
+			Class<?> clazz = classLoader.loadClass(className);
+			Method method = clazz.getDeclaredMethod(methodName, parameterTypes);
+			method.setAccessible(true);
+			return method;
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
