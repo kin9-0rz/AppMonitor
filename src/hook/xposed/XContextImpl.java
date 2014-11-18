@@ -45,7 +45,7 @@ public class XContextImpl extends XHook{
 						logList.add("time:" + time);
 						logList.add("action:--register broadcastReceiver--");
 						logList.add("function:registerReceiver");
-						logList.add("Receiver Name:" + param.args[0].toString());
+						logList.add("Receiver Name:" + param.args[0].getClass().toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}

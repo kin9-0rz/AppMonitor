@@ -40,15 +40,15 @@ public class XMethod extends XHook{
 						String time = Util.getSystemTime();
 						Method method = (Method)param.thisObject;
 						Object[] arg = (Object[])param.args[1];
-						StringBuffer argsb = new StringBuffer();
-						for(int i = 0;i<arg.length;i++){
-							argsb.append(arg[i]).append(" ");
-						}
+//						StringBuffer argsb = new StringBuffer();
+//						for(int i = 0;i<arg.length;i++){
+//							argsb.append(arg[i]).append(" ");
+//						}
 						logList.add("time:" + time);
 						logList.add("action:--invoke method--");
 						logList.add("function:invoke");
 						logList.add("method name:" + method.getName());
-						logList.add("args:" + argsb.toString());
+						logList.add("args:" + arg.toString());
 						for(String log : logList){
 							XposedBridge.log(log);
 						}
