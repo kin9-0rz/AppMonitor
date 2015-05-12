@@ -1,0 +1,22 @@
+add Logcat ...
+
+
+Add WifiManager  setWifiEnabled false
+add APN
+String filter ....
+get context ....
+
+Setting :
+Log - Logcat
+    - Logfile
+
+Block SMS
+Block 10086.cn/cmgame/cmvideo ...
+
+DumpDex
+DumpFiles
+
+
+get Context
+
+creat link
