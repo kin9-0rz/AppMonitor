@@ -7,6 +7,8 @@ android {
         applicationId "com.android.appmoniter"
         minSdkVersion 17
         targetSdkVersion 19
+        versionCode 1
+        versionName '2.0.1'
     }
     buildTypes {
         release {

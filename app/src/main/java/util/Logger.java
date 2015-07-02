@@ -10,7 +10,7 @@ import java.util.List;
 public class Logger {
 
 
-    private static final String TAG = "AppMonitor";
+    public static final String TAG = "AppMonitor";
 
     public final static void log(String str) {
         if (str.startsWith("[*** ")) {  // High
@@ -50,6 +50,11 @@ public class Logger {
         }
 
         return str;
+    }
+
+    public static void logCallRef() {
+        String callRef = Stack.getCallRef();
+        Log.e(TAG, callRef);
     }
 
 

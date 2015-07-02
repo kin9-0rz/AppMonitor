@@ -1,6 +1,7 @@
 package hook.xposed;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import util.Util;
 
 public class XNotificationManager extends XHook {
 
-    private static final String className = "android.app.NotificationManager";
+    private static final String className = NotificationManager.class.getName();
     private static List<String> logList = null;
     private static XNotificationManager classLoadHook;
 
