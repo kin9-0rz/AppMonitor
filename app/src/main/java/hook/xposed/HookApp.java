@@ -20,12 +20,6 @@ public class HookApp implements IXposedHookLoadPackage {
         if (appList == null || !appList.contains(loadPackageParam.packageName)) {
             return;
         }
-//        context = AndroidAppHelper.currentApplication();
-//        if (context == null) {
-//            Logger.log("***** HookApp context is NULL !!!! *****");
-//        } else {
-//            Logger.log("*** Nice ***");
-//        }
 
         hook(XAbstractHttpClient.getInstance(), loadPackageParam);
         hook(XActivity.getInstance(), loadPackageParam);
@@ -34,12 +28,14 @@ public class HookApp implements IXposedHookLoadPackage {
         hook(XApplicationPackageManager.getInstance(), loadPackageParam);
         hook(XAssetManager.getInstance(), loadPackageParam);
         hook(XAudioRecord.getInstance(), loadPackageParam);
+
         hook(XBroadcastReceiver.getInstance(), loadPackageParam);
 //        hook(XClass.getInstance(), loadPackageParam);
+        hook(XConnectivityManager.getInstance(), loadPackageParam);
         hook(XContext.getInstance(), loadPackageParam);
         hook(XContextImpl.getInstance(), loadPackageParam);
         hook(XContentResolver.getInstance(), loadPackageParam);
-        hook(XDexClassLoader.getInstance(), loadPackageParam);
+//        hook(XDexClassLoader.getInstance(), loadPackageParam);
         hook(XDialog.getInstance(), loadPackageParam);
         hook(XMediaRecorder.getInstance(), loadPackageParam);
         hook(XNotificationManager.getInstance(), loadPackageParam);
@@ -54,6 +50,7 @@ public class HookApp implements IXposedHookLoadPackage {
         hook(XViewGroup.getInstance(), loadPackageParam);
 //        hook(XWindowManageService.getInstance(), loadPackageParam);
         hook(XWifiManager.getInstance(), loadPackageParam);
+        hook(XBaseDexClassLoader.getInstance(), loadPackageParam);
 
     }
 

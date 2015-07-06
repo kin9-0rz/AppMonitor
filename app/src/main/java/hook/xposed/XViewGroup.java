@@ -7,7 +7,6 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
 import util.Logger;
-import util.Stack;
 
 public class XViewGroup extends XHook {
     private static final String className = ViewGroup.class.getName();
@@ -27,11 +26,19 @@ public class XViewGroup extends XHook {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
                         View view = (View) param.args[0];
-                        String callRef = Stack.getCallRef();
+                        String viewName = view.getClass().getName();
 
-                        Logger.log("[--- ViewGroup addView ---] ");
-                        Logger.log("[--- ViewGroup addView ---] " + view.getClass().getName());
-                        Logger.log("[--- ViewGroup addView ---] " + callRef);
+                        // TODO maybe read the view api to a list could be better ...
+                        if (viewName.startsWith("android.widget.") || viewName.startsWith("android.view.")
+                                || viewName.startsWith("android.support.v7.widget.") || viewName.startsWith("android.support.v7.internal.widget.")
+                                || viewName.startsWith("com.android.internal.widget.") || viewName.startsWith("com.android.internal.view")) {
+                            return;
+                        }
+
+                        Logger.log("[=== ViewGroup addView ===] ");
+                        Logger.log("[=== ViewGroup addView ===] " + viewName);
+                        Logger.logCallRef("[=== ViewGroup addView ===]");
+
 
                     }
 

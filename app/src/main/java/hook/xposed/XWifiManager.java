@@ -18,7 +18,6 @@ import util.Util;
 public class XWifiManager extends XHook {
 
     private static final String className = WifiManager.class.getName();
-    private static List<String> logList = null;
     private static XWifiManager xWifiManager;
 
     public static XWifiManager getInstance() {
@@ -30,14 +29,16 @@ public class XWifiManager extends XHook {
 
     @Override
     void hook(final XC_LoadPackage.LoadPackageParam packageParam) {
-        logList = new ArrayList<String>();
         XposedHelpers.findAndHookMethod(className, packageParam.classLoader, "setWifiEnabled",
                 Boolean.TYPE, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
                         String callRef = Stack.getCallRef();
                         boolean flag = (Boolean)param.args[0];
-                        if (!flag) {
+                        if (flag) {
+                            Logger.log("[### Enable Wifi ###]");
+                            Logger.log("[### Enable Wifi ###] " + callRef);
+                        } else {
                             Logger.log("[### Disable Wifi ###]");
                             Logger.log("[### Disable Wifi ###] " + callRef);
                         }

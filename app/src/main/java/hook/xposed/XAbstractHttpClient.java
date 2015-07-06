@@ -25,7 +25,6 @@ import util.Stack;
 import util.Util;
 
 public class XAbstractHttpClient extends XHook {
-    // TODO add other network hook api
     private static final String className = "org.apache.http.impl.client.AbstractHttpClient";
     private static List<String> logList = null;
     private static XAbstractHttpClient xAbstractHttpClient;
@@ -37,6 +36,41 @@ public class XAbstractHttpClient extends XHook {
         return xAbstractHttpClient;
     }
 
+
+    @Override
+    void hook(final XC_LoadPackage.LoadPackageParam packageParam) {
+
+        XposedHelpers.findAndHookMethod(className, packageParam.classLoader, "execute",
+                HttpHost.class, HttpRequest.class, HttpContext.class,
+                new XC_MethodHook() {
+                    @Override
+                    protected void afterHookedMethod(MethodHookParam param) {
+                        HttpHost host = (HttpHost) param.args[0];
+                        HttpRequestBase request = (HttpRequestBase) param.args[1];
+                        BasicHttpResponse respone = (BasicHttpResponse) param.getResult();
+
+                        if (request instanceof HttpGet) {
+                            HttpGet httpGet = (HttpGet) request;
+                            logList = handleHttpGet(host, httpGet);
+                            Util.writeNetLog(packageParam.packageName, logList);
+                        } else if (request instanceof HttpPost) {
+                            HttpPost httpPost = (HttpPost) request;
+                            logList = handleHttpPost(host, httpPost);
+                            Util.writeNetLog(packageParam.packageName, logList);
+                        } else {
+                            logList = handleResult(respone);
+                            Logger.log("[=== AbstractHttpClient execute ===] host : " + host);
+                            Util.writeNetLog(packageParam.packageName, logList);
+                        }
+
+                        Logger.logCallRef("[=== AbstractHttpClient execute ===] ");
+                        logList = writeAppLog(host);
+                        Util.writeLog(packageParam.packageName, logList);
+                    }
+                });
+    }
+
+
     public List<String> handleHttpGet(HttpHost httpHost, HttpGet httpGet) {
         List<String> logList = new ArrayList<String>();
         String host = httpHost.toURI().toString();
@@ -47,14 +81,14 @@ public class XAbstractHttpClient extends XHook {
         logList.add("HOST:" + host);
         logList.add("URL:" + url);
 
-        Logger.log("[=== AbstractHttpClient execute HttpGet ===] host : " + host);
-        Logger.log("[=== AbstractHttpClient execute HttpGet ===] url  : " + url);
+        Logger.log("[=== HttpGet ===] host : " + host);
+        Logger.log("[=== HttpGet ===] url  : " + url);
 
         Header[] header = httpGet.getAllHeaders();
         if (header != null) {
             for (int i = 0; i < header.length; i++) {
                 logList.add(header[i].getName() + ":" + header[i].getValue());
-                Logger.log("[=== AbstractHttpClient execute HttpGet ===] (Header) " + header[i].getName() + " : " + header[i].getValue());
+                Logger.log("[=== HttpGet ===] (Header) " + header[i].getName() + " : " + header[i].getValue());
             }
         }
 
@@ -70,14 +104,15 @@ public class XAbstractHttpClient extends XHook {
         logList.add("HTTP METHOD:" + httpPost.getMethod());
         logList.add("HOST:" + host);
         logList.add("URL:" + url);
-        Logger.log("[=== AbstractHttpClient execute HttpPost ===] host : " + host);
-        Logger.log("[=== AbstractHttpClient execute HttpPost ===] url  : " + url);
+
+        Logger.log("[=== HttpPost ===] host : " + host);
+        Logger.log("[=== HttpPost ===] url  : " + url);
 
         Header[] header = httpPost.getAllHeaders();
         if (header != null) {
             for (int i = 0; i < header.length; i++) {
                 logList.add(header[i].getName() + ":" + header[i].getValue());
-                Logger.log("[=== AbstractHttpClient execute HttpPost ===] (Header) " + header[i].getName() + " : " + header[i].getValue());
+                Logger.log("[=== HttpPost ===] (Header) " + header[i].getName() + " : " + header[i].getValue());
             }
         }
 
@@ -92,7 +127,7 @@ public class XAbstractHttpClient extends XHook {
                     String content = new String(data, HTTP.DEFAULT_CONTENT_CHARSET);
                     logList.add("HTTP POST CONTENT:" + content);
 
-                    Logger.log("[=== AbstractHttpClient execute HttpPost ===] Content  : " + content);
+                    Logger.log("[=== HttpPost ===] Content  : " + content);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -103,7 +138,7 @@ public class XAbstractHttpClient extends XHook {
                     String content = new String(data, contentType.substring(contentType.lastIndexOf("=") + 1));
                     logList.add("HTTP POST CONTENT:" + content);
 
-                    Logger.log("[=== AbstractHttpClient execute HttpPost ===] Content : " + content);
+                    Logger.log("[=== HttpPost ===] Content : " + content);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -115,11 +150,12 @@ public class XAbstractHttpClient extends XHook {
                 String content = new String(data, HTTP.DEFAULT_CONTENT_CHARSET);
                 logList.add("HTTP POST CONTENT:" + content);
 
-                Logger.log("[=== AbstractHttpClient execute HttpPost ===] Content : " + content);
+                Logger.log("[=== HttpPost ===] Content : " + content);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
         return logList;
     }
 
@@ -163,41 +199,6 @@ public class XAbstractHttpClient extends XHook {
         }
 
         return logList;
-    }
-
-    @Override
-    void hook(final XC_LoadPackage.LoadPackageParam packageParam) {
-
-        XposedHelpers.findAndHookMethod(className, packageParam.classLoader, "execute",
-                HttpHost.class, HttpRequest.class, HttpContext.class,
-                new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) {
-                        HttpHost host = (HttpHost) param.args[0];
-                        HttpRequestBase request = (HttpRequestBase) param.args[1];
-                        BasicHttpResponse respone = (BasicHttpResponse) param.getResult();
-                        String callRef = Stack.getCallRef();
-
-
-                        if (request instanceof HttpGet) {
-                            HttpGet httpGet = (HttpGet) request;
-                            logList = handleHttpGet(host, httpGet);
-                            Util.writeNetLog(packageParam.packageName, logList);
-                        } else if (request instanceof HttpPost) {
-                            HttpPost httpPost = (HttpPost) request;
-                            logList = handleHttpPost(host, httpPost);
-                            Util.writeNetLog(packageParam.packageName, logList);
-                        } else {
-                            logList = handleResult(respone);
-                            Logger.log("[=== AbstractHttpClient execute ===] host : " + host);
-                            Util.writeNetLog(packageParam.packageName, logList);
-                        }
-
-                        Logger.log("[=== AbstractHttpClient execute ===] " + callRef);
-                        logList = writeAppLog(host);
-                        Util.writeLog(packageParam.packageName, logList);
-                    }
-                });
     }
 
 }

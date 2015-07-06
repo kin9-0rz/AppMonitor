@@ -73,32 +73,31 @@ public class XApplicationPackageManager extends XHook {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
                         String callRef = Stack.getCallRef();
-                        Logger.log("[=== getInstalledPackages ===]");
                         Logger.log("[=== getInstalledPackages ===] " + callRef);
 
                         // TODO modify result
-                        Object obj = param.getResult();
-                        if (obj == null) {
-                            Logger.log("[=== getInstalledPackages ===] " + "NULL");
-                        } else if (obj instanceof List) {
-                            List<PackageInfo> list = (List<PackageInfo>) obj;
-                            List<PackageInfo> tmp = (List<PackageInfo>) obj;
-                            for (PackageInfo info : list) {
-                                Logger.log("[*** Test PackageInfo ***] " + info.packageName);
-                                if (info.packageName.contains("xposed")
-                                        || info.packageName.contains("acgmohu")) {
-                                    tmp.remove(info);
-                                }
-                            }
-                            param.setResult(tmp);
-                        } else {
-                            List<PackageInfo> list = new ArrayList<PackageInfo>();
-                            PackageInfo info = new PackageInfo();
-                            info.packageName = "com.game.kill2kill";
-                            info.packageName = "";
-                            list.add(info);
-                            param.setResult(list);
-                        }
+//                        Object obj = param.getResult();
+//                        if (obj == null) {
+//                            Logger.log("[=== getInstalledPackages ===] " + "NULL");
+//                        } else if (obj instanceof List) {
+//                            List<PackageInfo> list = (List<PackageInfo>) obj;
+//                            List<PackageInfo> tmp = (List<PackageInfo>) obj;
+//                            for (PackageInfo info : list) {
+//                                Logger.log("[*** Test PackageInfo ***] " + info.packageName);
+//                                if (info.packageName.contains("xposed")
+//                                        || info.packageName.contains("acgmohu")) {
+//                                    tmp.remove(info);
+//                                }
+//                            }
+//                            param.setResult(tmp);
+//                        } else {
+//                            List<PackageInfo> list = new ArrayList<PackageInfo>();
+//                            PackageInfo info = new PackageInfo();
+//                            info.packageName = "com.game.kill2kill";
+//                            info.packageName = "";
+//                            list.add(info);
+//                            param.setResult(list);
+//                        }
 
                     }
                 });
@@ -109,29 +108,29 @@ public class XApplicationPackageManager extends XHook {
                     @Override
                     protected void beforeHookedMethod(MethodHookParam param) {
                         String callRef = Stack.getCallRef();
-                        Logger.log("[=== getInstalledApplications ===]");
+//                        Logger.log("[=== getInstalledApplications ===]");
                         Logger.log("[=== getInstalledApplications ===] " + callRef);
 
-                        Object obj = param.getResult();
-                        if (obj instanceof List) {
-                            List<ApplicationInfo> list = (List<ApplicationInfo>) obj;
-                            List<ApplicationInfo> tmp = (List<ApplicationInfo>) obj;
-
-                            for (ApplicationInfo info : list) {
-                                if (info.packageName.contains("xposed")
-                                        || info.packageName.contains("acgmohu")) {
-                                    tmp.remove(info);
-                                }
-                            }
-                            param.setResult(tmp);
-                        } else {
-                            List<ApplicationInfo> list = new ArrayList<ApplicationInfo>();
-                            ApplicationInfo info = new ApplicationInfo();
-                            info.processName = "com.game.kill2kill";
-
-                            list.add(info);
-                            param.setResult(list);
-                        }
+//                        Object obj = param.getResult();
+//                        if (obj instanceof List) {
+//                            List<ApplicationInfo> list = (List<ApplicationInfo>) obj;
+//                            List<ApplicationInfo> tmp = (List<ApplicationInfo>) obj;
+//
+//                            for (ApplicationInfo info : list) {
+//                                if (info.packageName.contains("xposed")
+//                                        || info.packageName.contains("acgmohu")) {
+//                                    tmp.remove(info);
+//                                }
+//                            }
+//                            param.setResult(tmp);
+//                        } else {
+//                            List<ApplicationInfo> list = new ArrayList<ApplicationInfo>();
+//                            ApplicationInfo info = new ApplicationInfo();
+//                            info.processName = "com.game.kill2kill";
+//
+//                            list.add(info);
+//                            param.setResult(list);
+//                        }
                     }
                 });
     }
