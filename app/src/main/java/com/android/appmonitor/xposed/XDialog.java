@@ -1,8 +1,7 @@
 package com.android.appmonitor.xposed;
 
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.protocol.HttpContext;
+import android.app.Dialog;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,38 +14,36 @@ import com.android.appmonitor.util.Logger;
 import com.android.appmonitor.util.Stack;
 import com.android.appmonitor.util.Util;
 
-public class XAbstractHttpClient extends XHook {
-    private static final String className = "org.apache.http.impl.client.AbstractHttpClient";
+public class XDialog extends XHook {
+    private static final String className = Dialog.class.getName();
     private static List<String> logList = null;
-    private static XAbstractHttpClient classLoadHook;
+    private static XDialog xDialog;
 
-    public static XAbstractHttpClient getInstance() {
-        if (classLoadHook == null) {
-            classLoadHook = new XAbstractHttpClient();
+    public static XDialog getInstance() {
+        if (xDialog == null) {
+            xDialog = new XDialog();
         }
-        return classLoadHook;
+        return xDialog;
     }
 
     @Override
     void hook(final XC_LoadPackage.LoadPackageParam packageParam) {
         logList = new ArrayList<String>();
-        XposedHelpers.findAndHookMethod(className, packageParam.classLoader, "execute",
-                HttpHost.class, HttpRequest.class, HttpContext.class,
-                new XC_MethodHook() {
+
+        XposedHelpers.findAndHookMethod(className, packageParam.classLoader,
+                "setContentView", View.class, new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
                         String time = Util.getSystemTime();
                         String callRef = Stack.getCallRef();
-                        String url = param.args[0].toString();
-                        url = Logger.isFeeUrl(url);
 
-                        Logger.log("[AbstractHttpClient -> execute] " + url + " <- " + callRef);
+                        Logger.log("[--- DIALOG ---]");
+                        Logger.log("[--- DIALOG ---]" + callRef);
 
                         logList.add("time:" + time);
-                        logList.add("action:--executed--");
-                        logList.add("function:execute");
-                        logList.add("url:" + url);
-                        logList.add(callRef);
+                        logList.add("POP DIALOG");
+                        logList.add("StackTrace : " + callRef);
+
                         for (String log : logList) {
                             XposedBridge.log(log);
                         }
@@ -55,4 +52,5 @@ public class XAbstractHttpClient extends XHook {
                     }
                 });
     }
+
 }

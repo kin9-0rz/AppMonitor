@@ -1,10 +1,10 @@
-package hook.xposed;
+package com.android.appmonitor.xposed;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import util.Util;
+import com.android.appmonitor.util.Util;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
