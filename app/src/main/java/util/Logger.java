@@ -52,9 +52,9 @@ public class Logger {
         return str;
     }
 
-    public static void logCallRef() {
+    public static void logCallRef(String prefix) {
         String callRef = Stack.getCallRef();
-        Log.e(TAG, callRef);
+        log(prefix + " " + callRef);
     }
 
 

@@ -2,18 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/bin/Applications/android-sdk/extras/android/m2repository/com/android/support/support-v4/18.0.0/support-v4-18.0.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
-        <dex dex="/Users/bin/AndroidStudioProjects/AppMonitor/app/build/intermediates/pre-dexed/debug/support-v4-18.0.0-a7bc5fbabe6b6ba425a275dc3c73d32fef89982c.jar" />
-    </item>
-    <item
-        jar="/Users/bin/Applications/android-sdk/extras/android/m2repository/com/android/support/support-v4/18.0.0/support-v4-18.0.0.jar"
+        jar="C:\Users\v-laiyongbin\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-v4\18.0.0\support-v4-18.0.0.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
-        <dex dex="/Users/bin/AndroidStudioProjects/AppMonitor/app/build/intermediates/pre-dexed/debug/support-v4-18.0.0-a7bc5fbabe6b6ba425a275dc3c73d32fef89982c.jar" />
+        <dex dex="D:\Github\AppMonitor\app\build\intermediates\pre-dexed\debug\support-v4-18.0.0-1e8ded1d8b881253796f511b0cc7284ad82117e4.jar" />
     </item>
 
 </items>
