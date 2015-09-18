@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <set name="system_apis">
+        <string>M:Landroid/app/NotificationManager;->notify</string>
+        <string>L:Landroid/app/ApplicationPackageManager;->getInstalledPackages</string>
+    </set>
+</map>
