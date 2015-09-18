@@ -1,13 +1,6 @@
-<<<<<<< HEAD
-package hook.xposed;
-=======
 package com.android.appmonitor.xposed;
->>>>>>> origin/master
 
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.protocol.HttpContext;
-
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,24 +8,18 @@ import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-<<<<<<< HEAD
-import util.Logger;
-import util.Stack;
-import util.Util;
-=======
 import com.android.appmonitor.util.Logger;
 import com.android.appmonitor.util.Stack;
 import com.android.appmonitor.util.Util;
->>>>>>> origin/master
 
-public class XAbstractHttpClient extends XHook {
-    private static final String className = "org.apache.http.impl.client.AbstractHttpClient";
+public class XURL extends XHook {
+    private static final String className = "java.net.URL";
     private static List<String> logList = null;
-    private static XAbstractHttpClient classLoadHook;
+    private static XURL classLoadHook;
 
-    public static XAbstractHttpClient getInstance() {
+    public static XURL getInstance() {
         if (classLoadHook == null) {
-            classLoadHook = new XAbstractHttpClient();
+            classLoadHook = new XURL();
         }
         return classLoadHook;
     }
@@ -40,29 +27,40 @@ public class XAbstractHttpClient extends XHook {
     @Override
     void hook(final XC_LoadPackage.LoadPackageParam packageParam) {
         logList = new ArrayList<String>();
-        XposedHelpers.findAndHookMethod(className, packageParam.classLoader, "execute",
-                HttpHost.class, HttpRequest.class, HttpContext.class,
-                new XC_MethodHook() {
+
+        XposedHelpers.findAndHookMethod(className, packageParam.classLoader,
+                "openConnection", new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) {
                         String time = Util.getSystemTime();
+                        URL url = (URL) param.thisObject;
                         String callRef = Stack.getCallRef();
-                        String url = param.args[0].toString();
-                        url = Logger.isFeeUrl(url);
 
-                        Logger.log("[AbstractHttpClient -> execute] " + url + " <- " + callRef);
+
+                        boolean flag = Logger.isFeeUrl(url);
+                        if (flag) {
+                            Logger.log("[### URL openConnection ###]");
+                            Logger.log("[### URL openConnection ###] " + url);
+                            Logger.log("[### URL openConnection ###] " + callRef);
+                        } else {
+                            Logger.log("[=== URL openConnection ===]");
+                            Logger.log("[=== URL openConnection ===] " + url);
+                            Logger.log("[=== URL openConnection ===] " + callRef);
+                        }
 
                         logList.add("time:" + time);
-                        logList.add("action:--executed--");
-                        logList.add("function:execute");
+                        logList.add("action:--connect url--");
+                        logList.add("function:openConnection");
                         logList.add("url:" + url);
                         logList.add(callRef);
                         for (String log : logList) {
                             XposedBridge.log(log);
                         }
+
                         Util.writeLog(packageParam.packageName, logList);
                         logList.clear();
                     }
                 });
     }
+
 }

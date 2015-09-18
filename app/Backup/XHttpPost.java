@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 package hook.xposed;
+=======
+package com.android.appmonitor.xposed;
+>>>>>>> origin/master
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD
 import util.Util;
+=======
+import com.android.appmonitor.util.Util;
+>>>>>>> origin/master
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;

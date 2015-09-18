@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+<<<<<<< HEAD
+=======
+    <option name="DEFAULT_COMPILER" value="Javac" />
+>>>>>>> origin/master
     <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="!?*.java" />
@@ -17,6 +21,9 @@
         <processorPath useClasspath="true" />
       </profile>
     </annotationProcessing>
+<<<<<<< HEAD
     <bytecodeTargetLevel target="1.7" />
+=======
+>>>>>>> origin/master
   </component>
 </project>

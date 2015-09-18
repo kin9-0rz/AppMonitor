@@ -29,7 +29,11 @@
             android:value="54" />
 
         <activity
+<<<<<<< HEAD
             android:name="com.android.appmonitor.MainActivity"
+=======
+            android:name="com.android.appmonitor.ui.MainActivity"
+>>>>>>> origin/master
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +43,11 @@
         </activity>
 
         <receiver
+<<<<<<< HEAD
             android:name="com.android.appmonitor.NewInstallReceiver"
+=======
+            android:name="com.android.appmonitor.ui.NewInstallReceiver"
+>>>>>>> origin/master
             android:enabled="true"
             android:exported="true" >
             <intent-filter>
