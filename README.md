@@ -19,8 +19,13 @@ Usage
 
 TODO
 --------
+
 [ ] dump application loading jars.
+
 [ ] dump odex.
+
 [ ] hook application methods.
+
 [ ] Fake Phone Info.
+
 [ ] Update UI for setting api, phone info, etc.
