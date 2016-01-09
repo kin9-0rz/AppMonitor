@@ -8,6 +8,10 @@ import java.util.List;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import funnyparty.appmonitor.utils.Globle;
 
+/**
+ * TODO 这里仅仅显示了密钥，可能还需要hook加密解密，这样看起来会好一些。
+ *
+ */
 public class XSecretKeySpecHook extends MethodHook {
     private static final String mClassName = "javax.crypto.spec.SecretKeySpec";
 

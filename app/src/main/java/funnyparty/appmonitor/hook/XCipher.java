@@ -1,6 +1,5 @@
 package funnyparty.appmonitor.hook;
 
-import android.os.Binder;
 import android.util.Log;
 
 import java.lang.reflect.Field;
@@ -76,14 +75,14 @@ public class XCipher extends MethodHook {
     }
 
     private void logMsg(ArrayList<byte[]> plainByteList, ArrayList<byte[]> encryptByteList,
-                        int operationMode, String algorithm, int uid) {
+                        int operationMode, String algorithm) {
         int plainByteListSize = plainByteList.size();
         int encryptByteListSize = encryptByteList.size();
 
         int minSize = plainByteListSize >= encryptByteListSize ? encryptByteListSize : plainByteListSize;
         int maxSize = plainByteListSize >= encryptByteListSize ? plainByteListSize : encryptByteListSize;
-        String plainText = "";
-        String encryptText = "";
+        String plainText;
+        String encryptText;
         String operation = "encrypt";
         if (operationMode == DECRYPT_MODE)
             operation = "decrypt";
@@ -117,8 +116,6 @@ public class XCipher extends MethodHook {
 
     @Override
     public void after(MethodHookParam param) throws Throwable {
-        int uid = Binder.getCallingUid();
-
         Cipher cipherInst = (Cipher) param.thisObject;
         if (cipherInst == null)
             return;
@@ -159,7 +156,7 @@ public class XCipher extends MethodHook {
         }
 
         // Log message
-        this.logMsg(plainByteList, encryptByteList, operationMode, algorithm, uid);
+        this.logMsg(plainByteList, encryptByteList, operationMode, algorithm);
 
     }
 

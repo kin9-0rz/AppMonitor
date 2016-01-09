@@ -416,13 +416,13 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             }
         };
 
-        hookBuldInAPI();
+        hookBuIldInAPI();
         hookDatabaseAPI();
 
 //        hookCustomizedAppApis(appInfo.packageName, lpparam.classLoader);
     }
 
-    private void hookBuldInAPI() {
+    private void hookBuIldInAPI() {
         hookAll(XActivity.getMethodHookList());
         hookAll(XBaseDexClassLoader.getMethodHookList());
         hookAll(XCipher.getMethodHookList());

@@ -11,6 +11,9 @@ import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import funnyparty.appmonitor.utils.Globle;
 import funnyparty.appmonitor.utils.Util;
 
+/**
+ * TODO 读文件的时候，需要DUMP到SDCARD
+ */
 public class XIoBridge extends MethodHook {
     private static final String mClassName = "libcore.io.IoBridge";
     private Methods mMethod = null;

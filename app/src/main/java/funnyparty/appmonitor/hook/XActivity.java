@@ -5,7 +5,6 @@ import android.app.AndroidAppHelper;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class XActivity extends MethodHook {
 
     @Override
     public void after(MethodHookParam param) throws Throwable {
-        String argNames = null;
+//        String argNames = null;
 
         if (mMethod == Methods.onCreate) {
             Context context = AndroidAppHelper.currentApplication();

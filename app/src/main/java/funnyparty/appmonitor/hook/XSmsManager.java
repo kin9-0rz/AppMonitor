@@ -3,10 +3,12 @@ package funnyparty.appmonitor.hook;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import funnyparty.appmonitor.utils.Logger;
 
+/**
+ * 需要用来伪造手机号码，所以，不需要在外面的数据库配置。
+ */
 public class XSmsManager extends MethodHook {
     private static final String mClassName = "android.telephony.SmsManager";
     private Methods mMethod;
@@ -34,7 +36,6 @@ public class XSmsManager extends MethodHook {
         }
         return methodHookList;
     }
-
 
 
     @Override
