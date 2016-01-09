@@ -20,12 +20,12 @@ Usage
 TODO
 --------
 
-[ ] dump application loading jars.
+- [ ] dump application loading jars.
 
-[ ] dump odex.
+- [ ] dump odex.
 
-[ ] hook application methods.
+- [ ] hook application methods.
 
-[ ] Fake Phone Info.
+- [ ] Fake Phone Info.
 
-[ ] Update UI for setting api, phone info, etc.
+- [ ] Update UI for setting api, phone info, etc.
