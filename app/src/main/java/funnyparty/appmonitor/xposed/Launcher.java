@@ -25,6 +25,7 @@ import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers.ClassNotFoundError;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
+import funnyparty.appmonitor.hook.XThread;
 import funnyparty.appmonitor.utils.MethodParser;
 import funnyparty.appmonitor.hook.MethodHook;
 import funnyparty.appmonitor.hook.XActivity;
@@ -423,6 +424,7 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     }
 
     private void hookBuIldInAPI() {
+        hookAll(XThread.getMethodHookList());
         hookAll(XActivity.getMethodHookList());
         hookAll(XBaseDexClassLoader.getMethodHookList());
         hookAll(XCipher.getMethodHookList());
