@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ADAT</string>
+    <string name="app_name">AMON</string>
     <string name="action_settings">Settings</string>
     <string name="Icon">appIcon</string>
     <string name="title_activity_app">AppActivity</string>
@@ -16,6 +16,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Example action</string>
-    <string name="title_activity_home">Home</string>
+    <string name="title_activity_home">AMON</string>
 
 </resources>

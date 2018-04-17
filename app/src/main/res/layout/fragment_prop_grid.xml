@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="lai.adat.ui.fragments.phoneinfo.PhoneInfoFragment">
+    tools:context="me.mikusjelly.amon.ui.fragments.phoneinfo.PhoneInfoFragment">
 
     <GridView
         android:id="@android:id/list"

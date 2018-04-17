@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="lai.adat.ui.Home">
+    tools:context="me.mikusjelly.amon.ui.Home">
     <item
         android:id="@+id/action_example"
         android:showAsAction="withText|ifRoom"

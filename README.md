@@ -1,4 +1,2 @@
-AppMonitor ![project unmaintained](https://img.shields.io/badge/project-unmaintained-red.svg) 
+AMON - App Monitor
 ========
-
-Later I will creat another project to do it.
