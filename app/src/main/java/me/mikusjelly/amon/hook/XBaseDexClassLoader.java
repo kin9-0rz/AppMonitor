@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import me.mikusjelly.amon.utils.Logger;
 
 public class XBaseDexClassLoader extends MethodHook {
     private static final String mClassName = "dalvik.system.BaseDexClassLoader";
@@ -20,7 +19,7 @@ public class XBaseDexClassLoader extends MethodHook {
     // @formatter:on
 
     public static List<MethodHook> getMethodHookList() {
-        List<MethodHook> methodHookList = new ArrayList<MethodHook>();
+        List<MethodHook> methodHookList = new ArrayList<>();
         for (Methods method : Methods.values())
             methodHookList.add(new XBaseDexClassLoader(method, true));
 
@@ -29,7 +28,7 @@ public class XBaseDexClassLoader extends MethodHook {
 
     public void after(MethodHookParam param) throws Throwable {
         String argNames = "dexPath|optimizedDirectory|libraryPath|parent";
-        log(Logger.LEVEL_MID, param, argNames);
+        log(1, param, argNames);
     }
 
     private enum Methods {

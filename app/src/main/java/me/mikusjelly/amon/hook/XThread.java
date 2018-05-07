@@ -6,9 +6,6 @@ import java.util.List;
 import de.robv.android.xposed.XC_MethodHook;
 import me.mikusjelly.amon.utils.Global;
 
-/**
- * Created by bin on 1/29/16.
- */
 public class XThread  extends MethodHook {
 
     private static final String mClassName = "java.lang.Thread";

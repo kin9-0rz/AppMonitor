@@ -1,7 +1,5 @@
 package me.mikusjelly.amon.hook;
 
-import android.util.Log;
-
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -11,6 +9,7 @@ import javax.crypto.Cipher;
 
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import me.mikusjelly.amon.utils.Global;
+import me.mikusjelly.amon.utils.LogWriter;
 import me.mikusjelly.amon.utils.Util;
 
 public class XCipher extends MethodHook {
@@ -91,10 +90,10 @@ public class XCipher extends MethodHook {
         for (int i = 0; i < minSize; i++) {
             plainText = Util.toHex(plainByteList.get(i));
             encryptText = Util.toHex(encryptByteList.get(i));
-            String msg = String.format("=== Cipher === plaintext :" +
-                            "\"%s\" ,\"encrypttext\":\"%s\", \"operation\":\"%s\",\"algorithm\":\"%s\",\"id\":\"%d\" }}",
+            String msg = String.format("{\"plaintext\":\"%s\", \"encrypttext\":\"%s\", " +
+                            "\"operation\":\"%s\", \"algorithm\":\"%s\", \"id\":\"%d\", ",
                     plainText, encryptText, operation, algorithm, id);
-            Log.i(Global.LOG_TAG, msg);
+            LogWriter.logStack(msg);
         }
 
         for (int i = minSize; i < maxSize; i++) {
@@ -107,10 +106,10 @@ public class XCipher extends MethodHook {
                 encryptText = "";
             else
                 encryptText = Util.toHex(encryptByteList.get(i));
-            String msg = String.format("=== Cipher === plaintext\":" +
-                            "\"%s\",\"encrypttext\":\"%s\", \"operation\":\"%s\",\"algorithm\":\"%s\",\"id\":\"%d\" }}",
+            String msg = String.format("{\"plaintext\":\"%s\", \"encrypttext\":\"%s\", " +
+                            "\"operation\":\"%s\", \"algorithm\":\"%s\", \"id\":\"%d\", ",
                     plainText, encryptText, operation, algorithm, id);
-            Log.i(Global.LOG_TAG, msg);
+            LogWriter.logStack(msg);
         }
     }
 

@@ -159,8 +159,9 @@ public class MonitorFragment extends BaseFragment implements AdapterView.OnItemC
                         .getApplicationIcon(info.applicationInfo));
                 appInfo.setAppLabel(manager.getApplicationLabel(
                         info.applicationInfo).toString());
-                appInfo.setPkgName(info.applicationInfo.packageName);
 
+                int uid = info.applicationInfo.uid;
+                appInfo.setPkgName(info.applicationInfo.packageName + "_" + uid);
                 appInfoList.add(appInfo);
 
             }

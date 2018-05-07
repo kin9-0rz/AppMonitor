@@ -11,8 +11,13 @@ android {
         versionName getSelfDefinedVersion("name")
     }
     buildTypes {
+        debug {
+            buildConfigField "Boolean", "DEBUG_MODE", "true"
+        }
+
         release {
             minifyEnabled false
+            buildConfigField "Boolean", "DEBUG_MODE", "false"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
@@ -44,4 +49,6 @@ def getSelfDefinedVersion(type) {
 dependencies {
     provided fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:23.2.0'
+    implementation 'com.orhanobut:logger:2.2.0'
+    compile 'com.jaredrummler:android-shell:1.0.0'
 }

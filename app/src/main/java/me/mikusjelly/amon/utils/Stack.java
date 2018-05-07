@@ -1,10 +1,5 @@
 package me.mikusjelly.amon.utils;
 
-/**
- * Created by LAI on 4/15/15.
- *
- *
- */
 public class Stack {
     public static String getCallRef() {
         StackTraceElement[] traceElements = Thread.currentThread().getStackTrace();
@@ -19,8 +14,7 @@ public class Stack {
                     && !elements.startsWith("java.lang")
                     && !elements.startsWith("de.robv")
                     && !elements.startsWith("android.app")
-                    && !elements.startsWith("android.os")
-                    && !elements.startsWith("com.android")) {
+                    && !elements.startsWith("android.os")) {
 
                 if (isFirst) {
                     value = String.valueOf(elements.substring(0, elements.indexOf("(")));

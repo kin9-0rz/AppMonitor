@@ -1,7 +1,10 @@
 package me.mikusjelly.amon.hook;
 
+import android.os.Process;
+
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import me.mikusjelly.amon.utils.Logger;
+import de.robv.android.xposed.XposedBridge;
+import me.mikusjelly.amon.utils.LogWriter;
 import me.mikusjelly.amon.utils.MethodParser;
 
 public abstract class MethodHook {
@@ -36,7 +39,7 @@ public abstract class MethodHook {
         if (formattedArgs == null)
             formattedArgs = "";
 
-        String logMsg = String.format("=== %s->%s === %s", className, methodName, formattedArgs);
-        Logger.log(level, logMsg);
+        String logMsg = String.format("{\"Func\": \"%s->%s\", %s, ", className, methodName, formattedArgs);
+        LogWriter.logStack(logMsg);
     }
 }

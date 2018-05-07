@@ -1,7 +1,6 @@
 package me.mikusjelly.amon.hook;
 
 import android.os.Binder;
-import android.util.Log;
 
 import java.io.FileDescriptor;
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
 import me.mikusjelly.amon.utils.Global;
+import me.mikusjelly.amon.utils.LogWriter;
 import me.mikusjelly.amon.utils.Util;
 
 /**
@@ -17,6 +17,16 @@ import me.mikusjelly.amon.utils.Util;
 public class XIoBridge extends MethodHook {
     private static final String mClassName = "libcore.io.IoBridge";
     private Methods mMethod = null;
+    private ArrayList<String> paths = new ArrayList<String>() {
+        {
+            add("/amon/");
+            add("/proc/net/if_inet");
+            add("/sys/class/net/");
+            add("/system/etc/security/cacerts/");
+            add("/dev/urandom");
+            add("/proc/meminfo");
+        }
+    };
 
     private XIoBridge(Methods method) {
         super(mClassName, method.name());
@@ -37,10 +47,8 @@ public class XIoBridge extends MethodHook {
         return methodHookList;
     }
 
-    ;
-
     private ArrayList<byte[]> extractData(MethodHookParam param) {
-        ArrayList<byte[]> dataSlices = new ArrayList<byte[]>();
+        ArrayList<byte[]> dataSlices = new ArrayList<>();
 
         byte[] bytes = (byte[]) param.args[1];
         int byteOffset = (Integer) param.args[2];
@@ -73,8 +81,17 @@ public class XIoBridge extends MethodHook {
             if (param.args.length >= 1) {
 
                 String argNames = null;
-                if (mMethod == Methods.open)
+                if (mMethod == Methods.open) {
                     argNames = "path|flags";
+                }
+
+                String path = param.args[0].toString();
+                for (String str : paths) {
+                    if (path.contains(str)) {
+                        return;
+                    }
+                }
+
                 log(0, param, argNames);
             }
         } else if (mMethod == Methods.read) {
@@ -92,9 +109,9 @@ public class XIoBridge extends MethodHook {
 
                 ArrayList<byte[]> dataSlices = extractData(param);
                 for (int i = 0; i < dataSlices.size(); i++) {
-                    String logMsg = String.format("=== IoBridge ===\" FileRW\":{ \"operation\": \"read\",\"data\": \"%s\", \"id\": \"%d\"}}",
+                    String logMsg = String.format("{\"operation\": \"read\",\"data\": \"%s\", \"id\": \"%d\", ",
                             Util.toHex(dataSlices.get(i)), fdId);
-                    Log.i(Global.LOG_TAG, logMsg);
+                    LogWriter.logStack(logMsg);
                 }
 
             }
@@ -112,9 +129,9 @@ public class XIoBridge extends MethodHook {
                     return;
                 ArrayList<byte[]> dataSlices = extractData(param);
                 for (int i = 0; i < dataSlices.size(); i++) {
-                    String logMsg = String.format("=== IoBridge ===\" FileRW\":{ \"operation\": \"write\", \"data\": \"%s\", \"id\": \"%d\"}}",
+                    String logMsg = String.format("{\"operation\": \"write\", \"data\": \"%s\", \"id\": \"%d\", ",
                             Util.toHex(dataSlices.get(i)), fdId);
-                    Log.i(Global.LOG_TAG, logMsg);
+                    LogWriter.logStack(logMsg);
                 }
             }
         }

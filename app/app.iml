@@ -98,6 +98,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/shaders" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/splits-support" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/transforms" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
@@ -105,8 +106,10 @@
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="com.android.support:support-v4-23.2.0" level="project" />
+    <orderEntry type="library" name="com.jaredrummler:android-shell:1.0.0@jar" level="project" />
+    <orderEntry type="library" name="com.orhanobut:logger-2.2.0" level="project" />
     <orderEntry type="library" name="__local_aars__:/Users/bin/Projects/AppMonitor/app/libs/XposedBridgeApi-54.jar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="com.android.support:support-annotations:23.2.0@jar" level="project" />
+    <orderEntry type="library" name="com.android.support:support-annotations:27.1.0@jar" level="project" />
     <orderEntry type="library" name="org.apache.http.legacy-android-23" level="project" />
   </component>
 </module>

@@ -1,12 +1,12 @@
 package me.mikusjelly.amon.hook;
 
-import android.util.Log;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import me.mikusjelly.amon.utils.Global;
+import me.mikusjelly.amon.utils.LogWriter;
 
 /**
  * TODO 这里仅仅显示了密钥，可能还需要hook加密解密，这样看起来会好一些。
@@ -62,10 +62,10 @@ public class XSecretKeySpecHook extends MethodHook {
             k = k.substring(0, k.length() - 2);
         }
 
-        String logMsg = String.format(
-                "=== javax.crypto.spec.SecretKeySpec === {\"key\": \"%s\", \"algorithm\": \"%s\"}", k, algorithm);
+        String msg = String.format(
+                "{\"key\": \"%s\", \"algorithm\": \"%s\", ", k, algorithm);
 
-        Log.v(Global.LOG_TAG, logMsg);
+        LogWriter.logStack(msg);
     }
 
     private enum Methods {

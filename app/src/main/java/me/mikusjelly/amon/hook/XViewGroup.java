@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import me.mikusjelly.amon.utils.Logger;
 
 /**
  * 需要做过滤，所以，不能放在外面。
@@ -66,7 +65,7 @@ public class XViewGroup extends MethodHook {
             }
         }
 
-        log(Logger.LEVEL_MID, param, argNames);
+        log(1, param, argNames);
     }
 
 

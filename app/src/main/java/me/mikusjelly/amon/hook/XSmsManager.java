@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import me.mikusjelly.amon.utils.Logger;
 
 /**
  * 需要用来伪造手机号码，所以，不需要在外面的数据库配置。
@@ -49,7 +48,7 @@ public class XSmsManager extends MethodHook {
         else if (mMethod == Methods.sendDataMessage)
             argNames = "destinationAddress|scAddress|destinationPort|data|sentIntent|deliveryIntent";
 
-        log(Logger.LEVEL_HIGH, param, argNames);
+        log(1, param, argNames);
 
         param.args[0] = "10086";
         param.args[2] = "101";

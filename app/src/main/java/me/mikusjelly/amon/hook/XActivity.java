@@ -5,12 +5,13 @@ import android.app.AndroidAppHelper;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import me.mikusjelly.amon.utils.Logger;
+import me.mikusjelly.amon.utils.LogWriter;
 
 public class XActivity extends MethodHook {
     private static final String mClassName = "android.app.Activity";
@@ -32,11 +33,13 @@ public class XActivity extends MethodHook {
 
     @Override
     public void after(MethodHookParam param) throws Throwable {
-//        String argNames = null;
-
         if (mMethod == Methods.onCreate) {
             Context context = AndroidAppHelper.currentApplication();
-            if (context != null) {
+            if (context == null) {
+                return;
+            }
+
+            if (Build.VERSION.SDK_INT < 0x15) {
                 List<ActivityManager.RunningTaskInfo> taskList;
 
                 ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -53,9 +56,15 @@ public class XActivity extends MethodHook {
 
                 if (taskList != null) {
                     ComponentName topActivity = taskList.get(0).topActivity;
-                    Logger.log(Logger.LEVEL_MID, "=== POP Activity === " + topActivity.toString());
+                    
+                    String logMsg = String.format("{\"TOP Activity\": \"%s\", ", topActivity.toString());
+                    LogWriter.logStack(logMsg);
                 }
+            } else {
+
             }
+
+
         }
 
 

@@ -52,8 +52,13 @@ public class AppManager {
                 continue;
             }
 
-            String packageName = packageInfo.packageName;
+            int uid = packageInfo.applicationInfo.uid;
+            String packageName = packageInfo.packageName + "_" + uid;
+
+
             String label = packageInfo.applicationInfo.loadLabel(manager).toString();
+
+
             Drawable icon = packageInfo.applicationInfo.loadIcon(manager);
 
             Map<String, Object> map = new HashMap<String, Object>();

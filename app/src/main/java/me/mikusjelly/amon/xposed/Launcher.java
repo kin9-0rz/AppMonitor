@@ -5,6 +5,9 @@ import android.content.pm.ApplicationInfo;
 import android.os.Process;
 import android.util.Log;
 
+import com.jaredrummler.android.shell.CommandResult;
+import com.jaredrummler.android.shell.Shell;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -36,7 +39,7 @@ import me.mikusjelly.amon.hook.XSmsManager;
 import me.mikusjelly.amon.hook.XThread;
 import me.mikusjelly.amon.hook.XViewGroup;
 import me.mikusjelly.amon.utils.Global;
-import me.mikusjelly.amon.utils.Logger;
+import me.mikusjelly.amon.utils.LogWriter;
 import me.mikusjelly.amon.utils.MethodParser;
 import me.mikusjelly.amon.utils.Util;
 
@@ -84,7 +87,6 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     private static void hook(final MethodHook methodHook, ClassLoader classLoader) {
         try {
-
             // Create hook method
             XC_MethodHook xcMethodHook = new XC_MethodHook() {
                 @Override
@@ -130,7 +132,7 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             }
 
         } catch (Throwable ex) {
-
+            XposedBridge.log(ex);
         }
     }
 
@@ -153,12 +155,13 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            if (reader != null)
+            if (reader != null) {
                 try {
                     reader.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
         }
         return apiConfigList;
     }
@@ -188,7 +191,7 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                 }
 
             } catch (Exception ex) {
-                ex.printStackTrace();
+                XposedBridge.log(ex);
             }
         }
     }
@@ -200,14 +203,18 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
      * @return com.example.class
      */
     private static String convertClassName(String classNameDalvik) {
-        String className = null;
-        className = classNameDalvik.substring(1);
+        String className = classNameDalvik.substring(1);
         className = className.replace("/", ".");
         return className;
     }
 
     private static void log(MethodHookParam param, String hookType) {
         String argsValue = MethodParser.parseParameters(param);
+
+        if (argsValue.contains("/amon/")) {
+            return;
+        }
+
         String returnValue = MethodParser.parseReturnValue(param);
         String className = null;
         String methodName = null;
@@ -223,19 +230,10 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         }
 
         className = String.format("L%s", className.replace(".", "/"));
-        String logMsg = String.format("=== %s;->%s === parameters:%s, return:%s",
+        String logMsg = String.format("{\"Func\": \"%s;->%s\", \"parameters\":[%s], \"return\":[%s], ",
                 className, methodName, argsValue, returnValue);
 
-        Logger.log(apiMap.get(className + ";->" + methodName), logMsg);
-
-    }
-
-    private static void hookDatabaseAPI() {
-        Log.w(Global.LOG_TAG, "init database api - begin");
-        for (String methodInfo : apiSet) {
-            hookMethodInfo(methodInfo.substring(1), Global.HOOK_SYSTEM_API);
-        }
-        Log.w(Global.LOG_TAG, "init database api - finish");
+        LogWriter.logStack(logMsg);
     }
 
     public static void hookMethodInfo(String methodInfo, String hookType) {
@@ -259,11 +257,11 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         String methodName = methodInfoItems[1];
         Class<?> hookClass = null;
 
-        if (className != null) {
+//        if (className != null) {
             try {
                 hookClass = findClass(className, classLoader);
             } catch (ClassNotFoundError ignore) {
-                Log.d(Global.LOG_TAG, className + " not found");
+                XposedBridge.log(ignore);
             }
 
             if (hookClass != null && methodName != null) {
@@ -280,8 +278,8 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
                     methodHooked = true;
                 }
             }
-        } else
-            Log.d(Global.LOG_TAG, "class name is null.");
+//        } else {
+//        }
 
         return methodHooked;
     }
@@ -359,8 +357,8 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
     }
 
     public void initZygote(StartupParam startupParam) throws Throwable {
-        Log.d(Global.LOG_TAG, "initZygote ... ");
-        Log.d(Global.LOG_TAG, "modulePath : " + startupParam.modulePath);
+        XposedBridge.log("initZygote");
+        XposedBridge.log("modulePath:" + startupParam.modulePath);
 
         XSharedPreferences apis = new XSharedPreferences(Global.SELF_PACKAGE_NAME, Global.SHARED_PREFS_APIS);
         apiSet = apis.getStringSet("system_api", null);
@@ -370,12 +368,13 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
             String key = api.substring(1);
             int level = Integer.valueOf(api.substring(0, 1));
             apiMap.put(key, level);
-            Log.v(Global.LOG_TAG, key);
+            XposedBridge.log(key);
         }
+
+
     }
 
     public void handleLoadPackage(final LoadPackageParam lpparam) throws Throwable {
-//        Log.d(Global.LOG_TAG, "handleLoadPackage ... ");
         ApplicationInfo appInfo = lpparam.appInfo;
         if (appInfo == null) {
             return;
@@ -385,17 +384,15 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         pkgs = pre.getStringSet("pkgs", null);
 
         if (pkgs == null) {
-//            Log.e(Global.LOG_TAG, "pkgs is NULL");
             return;
         }
-
-        Log.d(Global.LOG_TAG, pkgs.toString());
 
         if (!pkgs.contains(lpparam.packageName)) {
             return;
         }
 
-        Log.d(Global.LOG_TAG, pkgs.toString());
+        XposedBridge.log(pkgs.toString());
+
 
         xcMethodHookApp = new XC_MethodHook() {
             @Override
@@ -424,6 +421,8 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 //        hookCustomizedAppApis(appInfo.packageName, lpparam.classLoader);
     }
 
+
+
     private void hookBuIldInAPI() {
         hookAll(XThread.getMethodHookList());
         hookAll(XActivity.getMethodHookList());
@@ -434,4 +433,13 @@ public class Launcher implements IXposedHookLoadPackage, IXposedHookZygoteInit {
         hookAll(XSmsManager.getMethodHookList());
         hookAll(XViewGroup.getMethodHookList());
     }
+
+
+    private static void hookDatabaseAPI() {
+        for (String methodInfo : apiSet) {
+            hookMethodInfo(methodInfo.substring(1), Global.HOOK_SYSTEM_API);
+        }
+    }
+
+
 }
