@@ -1,7 +1,5 @@
 package me.mikusjelly.amon.hook;
 
-import com.orhanobut.logger.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 

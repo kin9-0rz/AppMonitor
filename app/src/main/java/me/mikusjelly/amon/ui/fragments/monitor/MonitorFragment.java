@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,7 +69,7 @@ public class MonitorFragment extends BaseFragment implements AdapterView.OnItemC
             editor.putBoolean("isFirst", false);
             editor.apply();
         }
-
+//        TODO 应用加载列表过慢，需要优化
         if (appInfoList!=null) {
             initAppInfoList();
         }
