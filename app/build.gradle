@@ -51,4 +51,5 @@ dependencies {
     compile 'com.android.support:support-v4:23.2.0'
     implementation 'com.orhanobut:logger:2.2.0'
     compile 'com.jaredrummler:android-shell:1.0.0'
+    compile 'com.qmuiteam:qmui:1.0.6'
 }
