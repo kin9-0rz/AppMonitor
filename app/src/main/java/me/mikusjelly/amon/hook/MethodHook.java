@@ -1,9 +1,7 @@
 package me.mikusjelly.amon.hook;
 
-import android.os.Process;
 
 import de.robv.android.xposed.XC_MethodHook.MethodHookParam;
-import de.robv.android.xposed.XposedBridge;
 import me.mikusjelly.amon.utils.LogWriter;
 import me.mikusjelly.amon.utils.MethodParser;
 
