@@ -27,12 +27,12 @@ import java.util.Set;
 import me.mikusjelly.amon.R;
 import me.mikusjelly.amon.ui.Home;
 import me.mikusjelly.amon.ui.fragments.BaseFragment;
-import me.mikusjelly.amon.ui.fragments.app.AppManager;
 import me.mikusjelly.amon.utils.Global;
 
 public class MonitorFragment extends BaseFragment implements AdapterView.OnItemClickListener {
 
 
+    static List<PackageInfo> packageInfos;
     SharedPreferences settingPreferences = null;
     SharedPreferences hookPackagePreferences = null;
     Context mContext;
@@ -56,7 +56,7 @@ public class MonitorFragment extends BaseFragment implements AdapterView.OnItemC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext = this.getActivity();
+        mContext = this.getActivity().getApplicationContext();
 
         settingPreferences = mContext.getSharedPreferences(Global.SHARED_PREFS_SETTING, Context.MODE_PRIVATE);
         hookPackagePreferences = mContext.getSharedPreferences(Global.SHARED_PREFS_HOOK_PACKAGE, Context.MODE_WORLD_READABLE);
@@ -68,18 +68,83 @@ public class MonitorFragment extends BaseFragment implements AdapterView.OnItemC
             editor.apply();
         }
 
-        if (appInfoList!=null) {
-            initAppInfoList();
-        }
-        initUI();
+        initAppInfoList();
+        initIsCheckedArr();
     }
+
+    public void initAppInfoList() {
+        PackageManager manager = mContext.getPackageManager();
+        packageInfos = manager.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+//        isCheckedArr = new boolean[appInfoList.size()];
+//
+//        Set<String> hookPackageSet = hookPackagePreferences.getStringSet("pkgs", null);
+//
+//        if (hookPackageSet != null) {
+//            hookPackageList = new ArrayList<>(hookPackageSet);
+//        } else {
+//            hookPackageList = new ArrayList<>();
+//        }
+
+        for (int i = 0; i < packageInfos.size(); i++) {
+            PackageInfo info = packageInfos.get(i);
+
+            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) <= 0) {
+                AppInfo appInfo = new AppInfo();
+
+                appInfo.setAppIcon(manager.getApplicationIcon(info.applicationInfo));
+                appInfo.setAppLabel(manager.getApplicationLabel(info.applicationInfo).toString());
+
+                int uid = info.applicationInfo.uid;
+                String pkg = info.applicationInfo.packageName;
+                appInfo.setPkgName(pkg + "_" + uid);
+                appInfoList.add(appInfo);
+
+//                if(hookPackageSet.isEmpty()) {
+//                    continue;
+//                }
+//
+//                if (hookPackageSet.contains(pkg)) {
+//                    isCheckedArr[i] = true;
+//                }
+            }
+        }
+
+        Collections.sort(appInfoList, new Comparator<AppInfo>() {
+            @Override
+            public int compare(AppInfo lhs, AppInfo rhs) {
+                return lhs.getPkgName().compareTo(rhs.getPkgName());
+            }
+        });
+    }
+
+    public void initIsCheckedArr() {
+        isCheckedArr = new boolean[appInfoList.size()];
+        Set<String> hookPackageSet = hookPackagePreferences.getStringSet("pkgs", null);
+
+        if (hookPackageSet != null) {
+            hookPackageList = new ArrayList<>(hookPackageSet);
+        } else {
+            hookPackageList = new ArrayList<>();
+        }
+
+        if (hookPackageSet != null) {
+            for (AppInfo appinfo : appInfoList) {
+                if (hookPackageSet.contains(appinfo.getPkgName())) {
+                    int i = appInfoList.indexOf(appinfo);
+                    isCheckedArr[i] = true;
+                }
+            }
+        }
+
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+
         View view = inflater.inflate(R.layout.activity_main, container, false);
-
-        this.packageList = (ListView) view.findViewById(R.id.packageList);
-
+        this.packageList = view.findViewById(R.id.packageList);
         PackageInfoAdapter packageAdapter = new PackageInfoAdapter(inflater.getContext(), appInfoList, isCheckedArr);
         packageList.setAdapter(packageAdapter);
         packageList.setOnItemClickListener(this);
@@ -122,58 +187,6 @@ public class MonitorFragment extends BaseFragment implements AdapterView.OnItemC
         editor.apply();
     }
 
-
-    public void initUI() {
-        isCheckedArr = new boolean[appInfoList.size()];
-        Set<String> hookPackageSet = hookPackagePreferences.getStringSet("pkgs", null);
-
-        if (hookPackageSet != null) {
-            hookPackageList = new ArrayList<>(hookPackageSet);
-        } else {
-            hookPackageList = new ArrayList<>();
-        }
-
-        if (hookPackageSet != null) {
-            for (AppInfo appinfo : appInfoList) {
-                if (hookPackageSet.contains(appinfo.getPkgName())) {
-                    int i = appInfoList.indexOf(appinfo);
-                    isCheckedArr[i] = true;
-                }
-            }
-        }
-
-    }
-
-    public void initAppInfoList() {
-        PackageManager manager = mContext.getPackageManager();
-
-        List<PackageInfo> packages = AppManager.getInstallApp(mContext);
-
-        for (int i = 0; i < packages.size(); i++) {
-            PackageInfo info = packages.get(i);
-
-            if ((info.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) <= 0) {
-                AppInfo appInfo = new AppInfo();
-
-                appInfo.setAppIcon(manager
-                        .getApplicationIcon(info.applicationInfo));
-                appInfo.setAppLabel(manager.getApplicationLabel(
-                        info.applicationInfo).toString());
-
-                int uid = info.applicationInfo.uid;
-                appInfo.setPkgName(info.applicationInfo.packageName + "_" + uid);
-                appInfoList.add(appInfo);
-
-            }
-        }
-
-        Collections.sort(appInfoList, new Comparator<AppInfo>() {
-            @Override
-            public int compare(AppInfo lhs, AppInfo rhs) {
-                return lhs.getPkgName().compareTo(rhs.getPkgName());
-            }
-        });
-    }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {

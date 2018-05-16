@@ -14,39 +14,11 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by acgmohu on 7/8/15.
- */
 public class DataBaseManager {
-
-
-    /**
-     * This is a Assets Database Manager
-     * Use it, you can use a assets database file in you application
-     * It will copy the database file to "/data/data/[your application package name]/database" when you first time you use it
-     * Then you can get a SQLiteDatabase object by the assets database file
-     *
-     * @author RobinTang
-     * @time 2012-09-20
-     * <p/>
-     * <p/>
-     * How to use:
-     * 1. Initialize DataBaseManager
-     * 2. Get DataBaseManager
-     * 3. Get a SQLiteDatabase object through database file
-     * 4. Use this database object
-     * <p/>
-     * Using example:
-     * DataBaseManager.initManager(getApplication());	// this method is only need call one time
-     * DataBaseManager mg = DataBaseManager.getManager();	// get a DataBaseManager object
-     * SQLiteDatabase db1 = mg.getDatabase("db1.db");	// get SQLiteDatabase object, db1.db is a file in assets folder
-     * db1.???	// every operate by you want
-     * Of cause, you can use DataBaseManager.getManager().getDatabase("xx") to get a database when you need use a database
-     */
     private static String tag = "AssetsDatabase"; // for LogCat
     private static String databasepath = "/data/data/%s/database"; // %s is packageName
     private static DataBaseManager mInstance = null;
-    private Map<String, SQLiteDatabase> databases = new HashMap<String, SQLiteDatabase>();
+    private Map<String, SQLiteDatabase> databases = new HashMap<>();
     private Context context = null;
 
     private DataBaseManager(Context context) {
@@ -126,7 +98,6 @@ public class DataBaseManager {
     }
 
     private boolean copyAssetsToFilesystem(String assetsSrc, String des) {
-        Log.i(tag, "Copy " + assetsSrc + " to " + des);
         InputStream istream = null;
         OutputStream ostream = null;
         try {

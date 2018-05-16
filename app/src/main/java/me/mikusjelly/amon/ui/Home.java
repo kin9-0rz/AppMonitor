@@ -11,17 +11,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
-import android.widget.Adapter;
 
-import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.CsvFormatStrategy;
-import com.orhanobut.logger.DiskLogAdapter;
-import com.orhanobut.logger.FormatStrategy;
-import com.orhanobut.logger.Logger;
 
 import me.mikusjelly.amon.R;
 import me.mikusjelly.amon.ui.fragments.BlankFragment;
-import me.mikusjelly.amon.ui.fragments.appmanager.AppManagerFragment;
 import me.mikusjelly.amon.ui.fragments.monitor.MonitorFragment;
 import me.mikusjelly.amon.ui.fragments.phoneinfo.PhoneInfoFragment;
 
