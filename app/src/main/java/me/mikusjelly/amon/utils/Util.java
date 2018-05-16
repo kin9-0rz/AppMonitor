@@ -3,9 +3,6 @@ package me.mikusjelly.amon.utils;
 import android.os.Environment;
 import android.os.Process;
 
-import com.jaredrummler.android.shell.CommandResult;
-import com.jaredrummler.android.shell.Shell;
-
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -74,57 +71,6 @@ public class Util {
         }
     }
 
-    public static void backup(String src) {
-        final String filePath = Environment.getExternalStorageDirectory().getPath() + File.separator + "amon" + File.separator + Process.myUid();
-        File srcFile = new File(src);
-        String srcName = srcFile.getName();
-        String srcMd5 = calculateMD5(srcFile);
-        final File dir = new File(filePath);
-        if (!dir.exists()) {
-            dir.mkdir();
-        }
-
-        String dstName = srcName + "_" + srcMd5;
-        String dst = new File(filePath, dstName).getAbsolutePath();
-
-        cat(src, dst);
-
-//        try {
-//            copy(srcFile, dstFile);
-//        } catch (IOException e) {
-//            XposedBridge.log(e);
-//        }
-    }
-
-    public static boolean cat(String src, String dst) {
-        boolean isSuccess = false;
-        String unixCommand = "cat " + src + " > " + dst;
-        CommandResult result = Shell.SU.run(unixCommand);
-        if (result.isSuccessful()) {
-            isSuccess = true;
-        }
-
-        return isSuccess;
-    }
-
-    public static void copy(File src, File dst) throws IOException {
-        InputStream in = new FileInputStream(src);
-        try {
-            OutputStream out = new FileOutputStream(dst);
-            try {
-                // Transfer bytes from in to out
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    out.write(buf, 0, len);
-                }
-            } finally {
-                out.close();
-            }
-        } finally {
-            in.close();
-        }
-    }
 
     public static ArrayList<String> copyArrayList(ArrayList<String> srcArrayList) {
         ArrayList<String> dstArrayList = new ArrayList<String>();

@@ -1,18 +1,24 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId 'me.mikusjelly.amon'
-        minSdkVersion 17
-        targetSdkVersion 19
+        minSdkVersion 19
+        targetSdkVersion 26
         versionCode getSelfDefinedVersion("code")
         versionName getSelfDefinedVersion("name")
     }
     buildTypes {
         debug {
             buildConfigField "Boolean", "DEBUG_MODE", "true"
+            // 混淆
+            minifyEnabled true
+            // Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
         }
 
         release {
@@ -21,8 +27,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+    allprojects {
+        repositories {
+            maven { url "https://jitpack.io" }
+        }
+    }
+
     productFlavors {
     }
+
     useLibrary 'org.apache.http.legacy'
 
 
@@ -47,9 +61,11 @@ def getSelfDefinedVersion(type) {
 }
 
 dependencies {
-    provided fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-v4:23.2.0'
-    implementation 'com.orhanobut:logger:2.2.0'
-    compile 'com.jaredrummler:android-shell:1.0.0'
-    compile 'com.qmuiteam:qmui:1.0.6'
+    compileOnly fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.android.support:support-v4:23.2.0'
+    api 'com.android.support:appcompat-v7:27.1.1'
+    api 'com.android.support.constraint:constraint-layout:1.0.2'
+    api 'com.android.support:design:27.1.1'
+    api 'com.android.support:support-vector-drawable:27.1.1c'
+    api 'com.qmuiteam:qmui:1.1.2'
 }

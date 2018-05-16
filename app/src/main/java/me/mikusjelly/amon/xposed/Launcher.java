@@ -5,9 +5,6 @@ import android.content.pm.ApplicationInfo;
 import android.os.Process;
 import android.util.Log;
 
-import com.jaredrummler.android.shell.CommandResult;
-import com.jaredrummler.android.shell.Shell;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
