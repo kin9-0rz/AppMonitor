@@ -71,9 +71,9 @@ public class PackageInfoAdapter extends BaseAdapter {
         CheckBox isChooseButton;
 
         public ViewHolder(View view) {
-            this.appIcon = (ImageView) view.findViewById(R.id.appIcon);
-            this.appPkgName = (TextView) view.findViewById(R.id.packagename);
-            this.isChooseButton = (CheckBox) view.findViewById(R.id.isChecked);
+            this.appIcon = view.findViewById(R.id.appIcon);
+            this.appPkgName = view.findViewById(R.id.packagename);
+            this.isChooseButton = view.findViewById(R.id.isChecked);
         }
     }
 }

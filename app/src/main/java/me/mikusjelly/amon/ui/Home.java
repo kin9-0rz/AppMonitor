@@ -11,13 +11,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
-import android.widget.Adapter;
-
 
 
 import me.mikusjelly.amon.R;
 import me.mikusjelly.amon.ui.fragments.BlankFragment;
-import me.mikusjelly.amon.ui.fragments.appmanager.AppManagerFragment;
 import me.mikusjelly.amon.ui.fragments.monitor.MonitorFragment;
 import me.mikusjelly.amon.ui.fragments.phoneinfo.PhoneInfoFragment;
 
